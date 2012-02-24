@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
-svn co http://svn.felspar.com/public/fost-base/stable/fost-base src/fost-base
-svn co http://svn.felspar.com/public/fost-internet/stable/fost-internet src/fost-internet
-svn co http://svn.felspar.com/public/fost-orm/stable/fost-orm src/fost-orm
+svn co http://svn.felspar.com/external/Boost \
+    src/Boost
+src/Boost/install `lsb_release -cs`
+svn co https://svn.felspar.com/external/crypto++ \
+    src/crypto++
+svn co https://svn.felspar.com/external/OpenSSL \
+    src/OpenSSL
+
+svn co http://svn.felspar.com/public/fost-base/stable/fost-base \
+    src/fost-base
+svn co http://svn.felspar.com/public/fost-internet/stable/fost-internet \
+    src/fost-internet
+svn co http://svn.felspar.com/public/fost-orm/stable/fost-orm \
+    src/fost-orm
