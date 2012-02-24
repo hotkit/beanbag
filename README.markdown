@@ -1,4 +1,4 @@
-# Beanbag -- A lightweight JSON database #
+# Beanbag -- A lightweight JSON database  0.0 #
 
 Beanbag is a very lightweight ACID compliant transactional JSON database. The database itself is one or more JSON files and you interact with it through RESTful calls.
 
