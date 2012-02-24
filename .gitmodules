@@ -1,0 +1,3 @@
+[submodule "libs/fost-web"]
+	path = libs/fost-web
+	url = git@github.com:Felspar/fost-web.git
