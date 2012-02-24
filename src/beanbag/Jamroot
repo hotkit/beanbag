@@ -1,3 +1,15 @@
 path-constant TOP : . ;
 include $(TOP)/../boost-version.jam ;
 include ../fost-base/fost.jam ;
+
+#use-project fost-base : ../fost-base/ ;
+#use-project fost-internet : ../fost-internet/ ;
+#use-project fost-orm : ../fost-orm/ ;
+
+fost-project beanbag ;
+
+
+alias fost :
+        ../fost-base//fost
+    ;
+explicit fost ;

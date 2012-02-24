@@ -3,6 +3,11 @@
 svn co http://svn.felspar.com/external/Boost \
     src/Boost
 src/Boost/install `lsb_release -cs`
+cat > src/boost-version.jam << END
+BUILD_DIRECTORY = "../../tmp/oneiric" ;
+BOOST_VERSION_MAJOR = "46" ;
+END
+
 svn co https://svn.felspar.com/external/crypto++ \
     src/crypto++
 svn co https://svn.felspar.com/external/OpenSSL \
