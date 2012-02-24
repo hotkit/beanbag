@@ -10,5 +10,11 @@ fost-project beanbag ;
 
 alias fost :
         ../fost-base//fost
+        ../fost-internet//fost
+        ../fost-orm//fost
     ;
 explicit fost ;
+
+alias beanbag :
+        ../fost-web/Cpp/fost-webserver
+    ;
