@@ -1,4 +1,5 @@
 /bin/
+/Configuration/
 /lib/
 /src/bjam
 /src/bjam.run

@@ -11,7 +11,7 @@
 
 const class beanbag_raw : public fostlib::urlhandler::view {
     public:
-        beanbag()
+        beanbag_raw()
         : view("beanbag.raw") {
         }
 

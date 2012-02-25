@@ -21,6 +21,7 @@ alias fost :
 explicit fost ;
 
 alias beanbag :
+        ../fost-web/Configuration
         ../fost-web/Cpp/fost-webserver
         beanbag-views
     ;

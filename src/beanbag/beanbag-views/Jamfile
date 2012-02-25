@@ -1,7 +1,7 @@
 
-fost-lib-autotest beanbag-server
+fost-lib-autotest beanbag-views
     :
-        beanbag-server
+        beanbag-views
     :
         ../../fost-internet/Cpp/fost-inet
         ../../fost-orm/Cpp/fost-jsondb

@@ -1,0 +1,18 @@
+{
+    "webserver": {
+        "load": ["libbeanbag-views-d.so"],
+
+        "hosts": {
+            "localhost:8080": "raw"
+        },
+
+        "views": {
+            "raw": {
+                "view": "beanbag.raw",
+                "configuration": {
+                    "database": "tmp/raw.json"
+                }
+            }
+        }
+    }
+}
