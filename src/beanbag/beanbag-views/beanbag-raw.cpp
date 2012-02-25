@@ -22,13 +22,12 @@ const class beanbag_raw : public fostlib::urlhandler::view {
             const fostlib::host &
         ) const {
             fostlib::jsondb::local db(*beanbag::database(options["database"]));
+            fostlib::string html(fostlib::utf::load_file(
+            fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
 
             boost::shared_ptr<fostlib::mime> response(
                     new fostlib::text_body(
-                        L"<html><head><title>Beanbag</title></head>"
-                            L"<body><h1>Beanbag server</h1>"
-                            L"<pre>" + fostlib::json::unparse(db[fostlib::jcursor()], true) + L"</pre>"
-                            L"</body></html>",
+                        replaceAll(html, "[[json]]", fostlib::json::unparse(db[fostlib::jcursor()], true)),
                         fostlib::mime::mime_headers(), L"text/html" ));
             return std::make_pair(response, 200);
         }

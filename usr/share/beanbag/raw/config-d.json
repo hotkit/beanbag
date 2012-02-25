@@ -14,6 +14,9 @@
                         "name": "raw",
                         "filepath": "raw.json",
                         "template": "usr/share/beanbag/raw/database.json"
+                    },
+                    "html": {
+                        "template": "usr/share/beanbag/raw/template.html"
                     }
                 }
             }
