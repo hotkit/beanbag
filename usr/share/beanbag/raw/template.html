@@ -13,8 +13,8 @@
                     data: $("#data").val(),
                     dataType: "text",
                     type: "PUT",
-                    success: function() {
-                        history.go(0);
+                    success: function(data) {
+                        $("#data").val(data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert(jqXHR.responseText);
