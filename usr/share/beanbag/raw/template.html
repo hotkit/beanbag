@@ -15,6 +15,9 @@
                     type: "PUT",
                     success: function() {
                         history.go(0);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseText);
                     }
                 });
             }
