@@ -1,6 +1,7 @@
 /bin/
 /Configuration/
 /lib/
+/raw.json
 /src/bjam
 /src/bjam.run
 /src/Boost

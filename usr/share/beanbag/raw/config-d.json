@@ -10,7 +10,11 @@
             "raw": {
                 "view": "beanbag.raw",
                 "configuration": {
-                    "database": "tmp/raw.json"
+                    "database": {
+                        "name": "raw",
+                        "filepath": "raw.json",
+                        "template": "usr/share/beanbag/raw/database.json"
+                    }
                 }
             }
         }

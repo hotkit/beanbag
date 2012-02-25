@@ -18,16 +18,20 @@ namespace {
 
 
 boost::shared_ptr< fostlib::jsondb > beanbag::database(
-        const fostlib::json &which_json) {
-    fostlib::string which(fostlib::coerce<fostlib::string>(which_json));
+        const fostlib::json &which) {
+    fostlib::string name(fostlib::coerce<fostlib::string>(which["name"]));
 
     boost::mutex::scoped_lock lock(g_mutex);
-    databases_t::const_iterator loc(g_databases.find(which));
+    databases_t::const_iterator loc(g_databases.find(name));
 
     if ( loc == g_databases.end() ) {
+        fostlib::json tplate(fostlib::json::parse(fostlib::utf::load_file(
+            fostlib::coerce<boost::filesystem::wpath>(which["template"]))));
         boost::shared_ptr< fostlib::jsondb > db(
-            new fostlib::jsondb(which) );
-        g_databases[which] = db;
+            new fostlib::jsondb(
+                fostlib::coerce<fostlib::string>(which["filepath"]),
+                tplate) );
+        g_databases[name] = db;
         return db;
     } else
         return loc->second;
