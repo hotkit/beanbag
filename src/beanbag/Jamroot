@@ -5,8 +5,13 @@ include ../fost-base/fost.jam ;
 use-project fost-base : ../fost-base/ ;
 use-project fost-internet : ../fost-internet/ ;
 use-project fost-orm : ../fost-orm/ ;
+use-project fost-web : ../fost-web/ ;
 
-fost-project beanbag ;
+fost-project beanbag
+    :
+        <include>../fost-internet/Cpp/include
+        <include>../fost-web/Cpp/include
+    ;
 
 alias fost :
         ../fost-base//fost
@@ -17,4 +22,5 @@ explicit fost ;
 
 alias beanbag :
         ../fost-web/Cpp/fost-webserver
+        beanbag-views
     ;

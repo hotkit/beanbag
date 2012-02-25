@@ -1,0 +1,9 @@
+
+fost-lib-autotest beanbag-server
+    :
+        beanbag-server
+    :
+        ../../fost-internet/Cpp/fost-inet
+        ../../fost-orm/Cpp/fost-jsondb
+        ../../fost-web/Cpp/fost-urlhandler
+    ;
