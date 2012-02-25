@@ -7,13 +7,24 @@
             </script>
         <script>
             var data = [[json]];
+
+            function update() {
+                $.ajax(document.url, {
+                    data: $("#data").val(),
+                    dataType: "text",
+                    type: "PUT",
+                    success: function() {
+                        history.go(0);
+                    }
+                });
+            }
         </script>
     </head>
     <body>
-        <form id="data">
-            <textarea name="data" rows="20" cols="80">[[json]]</textarea>
+        <form id="data_fomr">
+            <textarea id="data" rows="20" cols="80">[[json]]</textarea>
             <br />
-            <button>Save changes</button>
+            <button onClick="update()">Save changes</button>
         </form>
     </body>
 </html>

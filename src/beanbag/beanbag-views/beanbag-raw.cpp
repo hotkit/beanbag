@@ -23,12 +23,21 @@ const class beanbag_raw : public fostlib::urlhandler::view {
         ) const {
             fostlib::jsondb::local db(*beanbag::database(options["database"]));
             fostlib::string html(fostlib::utf::load_file(
-            fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
+                fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
 
-            boost::shared_ptr<fostlib::mime> response(
-                    new fostlib::text_body(
-                        replaceAll(html, "[[json]]", fostlib::json::unparse(db[fostlib::jcursor()], true)),
-                        fostlib::mime::mime_headers(), L"text/html" ));
-            return std::make_pair(response, 200);
+            if ( req.method() == "GET" ) {
+                boost::shared_ptr<fostlib::mime> response(
+                        new fostlib::text_body(
+                            replaceAll(html, "[[json]]", fostlib::json::unparse(db[fostlib::jcursor()], true)),
+                            fostlib::mime::mime_headers(), L"text/html" ));
+                return std::make_pair(response, 200);
+//             } else if ( req.method == "PUT" ) {
+            } else {
+                boost::shared_ptr<fostlib::mime> response(
+                        new fostlib::text_body(
+                            req.method() + " not supported",
+                            fostlib::mime::mime_headers(), L"text/plain" ));
+                return std::make_pair(response, 403);
+            }
         }
 } c_beanbag_raw;
