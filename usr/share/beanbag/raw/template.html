@@ -6,7 +6,9 @@
         <script src="http://docs-next.angularjs.org/angular-0.10.6.min.js">
             </script>
         <script>
-            var data = [[json]];
+            var data = [[data]];
+            var path = [[path]];
+            var path_string = '[[path]]';
 
             function update() {
                 $.ajax(document.url, {
@@ -24,8 +26,9 @@
         </script>
     </head>
     <body>
+        <p><a  onClick="alert(path_string)">Breadcrumbs</a>: {{path}}</p>
         <form id="data_fomr">
-            <textarea id="data" rows="20" cols="80">[[json]]</textarea>
+            <textarea id="data" rows="20" cols="80">[[data]]</textarea>
             <br />
             <button onClick="update()">Save changes</button>
         </form>

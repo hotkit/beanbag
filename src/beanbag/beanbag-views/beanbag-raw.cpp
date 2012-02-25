@@ -17,7 +17,7 @@ const class beanbag_raw : public fostlib::urlhandler::view {
         }
 
         std::pair<boost::shared_ptr<fostlib::mime>, int> operator () (
-            const fostlib::json &options, const fostlib::string &path,
+            const fostlib::json &options, const fostlib::string &pathname,
             fostlib::http::server::request &req,
             const fostlib::host &
         ) const {
@@ -25,10 +25,23 @@ const class beanbag_raw : public fostlib::urlhandler::view {
             fostlib::string html(fostlib::utf::load_file(
                 fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
 
+            fostlib::split_type path = fostlib::split(pathname, "/");
+            fostlib::json data_path; fostlib::jcursor position;
+            for ( fostlib::split_type::const_iterator part(path.begin()); part != path.end(); ++part ) {
+                fostlib::push_back(data_path, *part);
+            }
+            if ( pathname[pathname.length()-1] == '/' )
+                fostlib::push_back(data_path, fostlib::json());
+
             if ( req.method() == "GET" ) {
+                html = replaceAll(html, "[[data]]",
+                    fostlib::json::unparse(db[fostlib::jcursor()], true));
+                html = replaceAll(html, "[[path]]",
+                    fostlib::json::unparse(data_path, false));
+
                 boost::shared_ptr<fostlib::mime> response(
                         new fostlib::text_body(
-                            replaceAll(html, "[[json]]", fostlib::json::unparse(db[fostlib::jcursor()], true)),
+                            html,
                             fostlib::mime::mime_headers(), L"text/html" ));
                 return std::make_pair(response, 200);
             } else if ( req.method() == "PUT" ) {
