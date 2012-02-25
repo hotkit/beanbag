@@ -17,5 +17,5 @@ svn co http://svn.felspar.com/public/fost-base/stable/fost-base \
     src/fost-base
 svn co http://svn.felspar.com/public/fost-internet/stable/fost-internet \
     src/fost-internet
-svn co http://svn.felspar.com/public/fost-orm/stable/fost-orm \
+svn co http://svn.felspar.com/public/fost-orm/trunk/fost-orm \
     src/fost-orm
