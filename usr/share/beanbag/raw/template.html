@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype xhtml>
 <html xmlns:ng="http://angularjs.org" ng:app>
     <head>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
@@ -20,15 +20,18 @@
             function data_editor() {
                 var self = this;
                 self.data = [[data]];
-                if ( angular.isObject(self.data) )
-                    self.root_type = 'object';
-                else if ( angular.isArray(self.data) )
-                    self.root_type = 'array';
-                else
-                    self.root_type = 'atom';
-                self.root_is_complex = (self.root_type != 'atom');
+                self.update_classification = function() {
+                    if ( angular.isObject(self.data) )
+                        self.root_type = 'object';
+                    else if ( angular.isArray(self.data) )
+                        self.root_type = 'array';
+                    else
+                        self.root_type = 'atom';
+                    self.root_is_complex = (self.root_type != 'atom');
+                };
+                self.update_classification();
                 self.update = function() {
-                    $.ajax(document.url, {
+                    $.ajax(document.URL, {
                         data: $("#data").val(),
                         dataType: "text",
                         type: "PUT",
@@ -36,6 +39,7 @@
                             $("#data").val(data);
                             self.$apply(function() {
                                 self.data = $.parseJSON(data);
+                                self.update_classification();
                             });
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
