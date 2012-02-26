@@ -32,10 +32,12 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     fostlib::json data_path; fostlib::jcursor position;
     for ( fostlib::split_type::const_iterator part(path.begin());
             part != path.end(); ++part ) {
-        fostlib::push_back(data_path, *part);
         try {
-            position /= fostlib::coerce<int>(*part);
+            int index = fostlib::coerce<int>(*part);
+            fostlib::push_back(data_path, index);
+            position /= index;
         } catch ( fostlib::exceptions::parse_error& ) {
+            fostlib::push_back(data_path, *part);
             position /= *part;
         }
     }
