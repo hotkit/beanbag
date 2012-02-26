@@ -7,6 +7,7 @@
 
 
 #include <fost/urlhandler>
+#include <fost/exception/parse_error.hpp>
 #include "databases.hpp"
 
 
@@ -30,11 +31,16 @@ const class beanbag_raw : public fostlib::urlhandler::view {
             for ( fostlib::split_type::const_iterator part(path.begin());
                     part != path.end(); ++part ) {
                 fostlib::push_back(data_path, *part);
+                try {
+                    position /= fostlib::coerce<int>(*part);
+                } catch ( fostlib::exceptions::parse_error& ) {
+                    position /= *part;
+                }
             }
 
             if ( req.method() == "GET" ) {
                 html = replaceAll(html, "[[data]]",
-                    fostlib::json::unparse(db[fostlib::jcursor()], true));
+                    fostlib::json::unparse(db[position], true));
                 html = replaceAll(html, "[[path]]",
                     fostlib::json::unparse(data_path, false));
 
@@ -48,11 +54,11 @@ const class beanbag_raw : public fostlib::urlhandler::view {
                 fostlib::string json_string = fostlib::coerce<fostlib::string>(
                     data->data());
                 fostlib::json new_data = fostlib::json::parse(json_string);
-                db.update(fostlib::jcursor(), new_data);
+                db.update(position, new_data);
                 db.commit();
                 boost::shared_ptr<fostlib::mime> response(
                         new fostlib::text_body(
-                            fostlib::json::unparse(db[fostlib::jcursor()], true),
+                            fostlib::json::unparse(db[position], true),
                             fostlib::mime::mime_headers(), L"application/json" ));
                 return std::make_pair(response, 200);
             } else {

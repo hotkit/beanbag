@@ -6,22 +6,6 @@
         <script src="http://docs-next.angularjs.org/angular-0.10.6.min.js">
             </script>
         <script>
-            var data = [[data]];
-
-            function update() {
-                $.ajax(document.url, {
-                    data: $("#data").val(),
-                    dataType: "text",
-                    type: "PUT",
-                    success: function(data) {
-                        $("#data").val(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert(jqXHR.responseText);
-                    }
-                });
-            }
-
             function breadcrumbs() {
                 var self = this;
                 var uri = '/', path = [[path]];
@@ -33,6 +17,26 @@
                     });
                 });
             }
+            function data_editor() {
+                var self = this;
+                self.data = [[data]];
+                self.update = function() {
+                    $.ajax(document.url, {
+                        data: $("#data").val(),
+                        dataType: "text",
+                        type: "PUT",
+                        success: function(data) {
+                            $("#data").val(data);
+                            self.$apply(function() {
+                                self.data = $.parseJSON(data);
+                            });
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(jqXHR.responseText);
+                        }
+                    });
+                }
+            }
         </script>
     </head>
     <body>
@@ -41,10 +45,18 @@
             <span ng:repeat="part in crumbs"> &gt;
                 <a href={{part.uri}}>{{part.name}}</a></span>
         </p>
-        <form id="data_fomr">
-            <textarea id="data" rows="20" cols="80">[[data]]</textarea>
-            <br />
-            <button onClick="update()">Save changes</button>
-        </form>
+
+        <h1>JSON editor</h1>
+
+        <div ng:controller="data_editor">
+            <ul>
+                <li ng:repeat="(k, v) in data"><a href="{{k}}/">{{k}}</a></li>
+            </ul>
+            <form ng:submit="update()" id="data_fomr">
+                <textarea id="data" rows="20" cols="80">[[data]]</textarea>
+                <br />
+                <button>Save changes</button>
+            </form>
+        </div>
     </body>
 </html>
