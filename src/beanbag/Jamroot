@@ -12,6 +12,7 @@ fost-project beanbag
         <include>../fost-internet/Cpp/include
         <include>../fost-orm/Cpp/include
         <include>../fost-web/Cpp/include
+        <include>include
     ;
 
 alias fost :
