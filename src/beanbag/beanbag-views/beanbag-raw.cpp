@@ -27,11 +27,10 @@ const class beanbag_raw : public fostlib::urlhandler::view {
 
             fostlib::split_type path = fostlib::split(pathname, "/");
             fostlib::json data_path; fostlib::jcursor position;
-            for ( fostlib::split_type::const_iterator part(path.begin()); part != path.end(); ++part ) {
+            for ( fostlib::split_type::const_iterator part(path.begin());
+                    part != path.end(); ++part ) {
                 fostlib::push_back(data_path, *part);
             }
-            if ( pathname[pathname.length()-1] == '/' )
-                fostlib::push_back(data_path, fostlib::json());
 
             if ( req.method() == "GET" ) {
                 html = replaceAll(html, "[[data]]",

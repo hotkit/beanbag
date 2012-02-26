@@ -7,8 +7,6 @@
             </script>
         <script>
             var data = [[data]];
-            var path = [[path]];
-            var path_string = '[[path]]';
 
             function update() {
                 $.ajax(document.url, {
@@ -23,10 +21,26 @@
                     }
                 });
             }
+
+            function breadcrumbs() {
+                var self = this;
+                var uri = '/', path = [[path]];
+                self.crumbs = [];
+                angular.forEach(path, function(value) {
+                    uri += value + '/';
+                    self.crumbs.push({
+                        name: value, uri: uri
+                    });
+                });
+            }
         </script>
     </head>
     <body>
-        <p><a  onClick="alert(path_string)">Breadcrumbs</a>: {{path}}</p>
+        <p ng:controller="breadcrumbs">
+            <a href="/">home</a>
+            <span ng:repeat="part in crumbs"> &gt;
+                <a href={{part.uri}}>{{part.name}}</a></span>
+        </p>
         <form id="data_fomr">
             <textarea id="data" rows="20" cols="80">[[data]]</textarea>
             <br />
