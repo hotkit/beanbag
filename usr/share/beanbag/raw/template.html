@@ -20,6 +20,13 @@
             function data_editor() {
                 var self = this;
                 self.data = [[data]];
+                if ( angular.isObject(self.data) )
+                    self.root_type = 'object';
+                else if ( angular.isArray(self.data) )
+                    self.root_type = 'array';
+                else
+                    self.root_type = 'atom';
+                self.root_is_complex = (self.root_type != 'atom');
                 self.update = function() {
                     $.ajax(document.url, {
                         data: $("#data").val(),
@@ -49,9 +56,11 @@
         <h1>JSON editor</h1>
 
         <div ng:controller="data_editor">
-            <ul>
-                <li ng:repeat="(k, v) in data"><a href="{{k}}/">{{k}}</a></li>
-            </ul>
+            <ng:switch on="root_is_complex">
+                <ul ng:switch-when="true">
+                    <li ng:repeat="(k, v) in data"><a href="{{k}}/">{{k}}</a></li>
+                </ul>
+            </ng:switch>
             <form ng:submit="update()" id="data_fomr">
                 <textarea id="data" rows="20" cols="80">[[data]]</textarea>
                 <br />
