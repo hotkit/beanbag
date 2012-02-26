@@ -16,6 +16,10 @@ namespace {
 }
 
 
+beanbag::raw_view::raw_view(const fostlib::string &name)
+: view(name) {
+}
+
 std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () (
     const fostlib::json &options, const fostlib::string &pathname,
     fostlib::http::server::request &req,
