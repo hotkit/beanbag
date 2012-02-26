@@ -22,8 +22,7 @@ beanbag::raw_view::raw_view(const fostlib::string &name)
 
 std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () (
     const fostlib::json &options, const fostlib::string &pathname,
-    fostlib::http::server::request &req,
-    const fostlib::host &
+    fostlib::http::server::request &req, const fostlib::host &host
 ) const {
     fostlib::jsondb::local db(*beanbag::database(options["database"]));
     fostlib::string html(fostlib::utf::load_file(
@@ -42,8 +41,9 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     }
 
     if ( req.method() == "GET" ) {
+        fostlib::json data(get(options, pathname, req, host, db, position));
         html = replaceAll(html, "[[data]]",
-            fostlib::json::unparse(db[position], true));
+            fostlib::json::unparse(data, true));
         html = replaceAll(html, "[[path]]",
             fostlib::json::unparse(data_path, false));
 
@@ -53,18 +53,10 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
                     fostlib::mime::mime_headers(), L"text/html" ));
         return std::make_pair(response, 200);
     } else if ( req.method() == "PUT" ) {
-        boost::shared_ptr< fostlib::binary_body > data(req.data());
-        fostlib::string json_string = fostlib::coerce<fostlib::string>(
-            data->data());
-        fostlib::json new_data = fostlib::json::parse(json_string);
-        if ( db.has_key(position) )
-            db.update(position, new_data);
-        else
-            db.insert(position, new_data);
-        db.commit();
+        fostlib::json data(put(options, pathname, req, host, db, position));
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
-                    fostlib::json::unparse(db[position], true),
+                    fostlib::json::unparse(data, true),
                     fostlib::mime::mime_headers(), L"application/json" ));
         return std::make_pair(response, 200);
     } else {
@@ -74,4 +66,31 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
                     fostlib::mime::mime_headers(), L"text/plain" ));
         return std::make_pair(response, 403);
     }
+}
+
+
+fostlib::json beanbag::raw_view::get(
+    const fostlib::json &, const fostlib::string &,
+    fostlib::http::server::request &, const fostlib::host &,
+    fostlib::jsondb::local &db, const fostlib::jcursor &position
+) const {
+    return db[position];
+}
+
+
+fostlib::json beanbag::raw_view::put(
+    const fostlib::json &options, const fostlib::string &pathname,
+    fostlib::http::server::request &req, const fostlib::host &host,
+    fostlib::jsondb::local &db, const fostlib::jcursor &position
+) const {
+    boost::shared_ptr< fostlib::binary_body > data(req.data());
+    fostlib::string json_string = fostlib::coerce<fostlib::string>(
+        data->data());
+    fostlib::json new_data = fostlib::json::parse(json_string);
+    if ( db.has_key(position) )
+        db.update(position, new_data);
+    else
+        db.insert(position, new_data);
+    db.commit();
+    return get(options, pathname, req, host, db, position);
 }

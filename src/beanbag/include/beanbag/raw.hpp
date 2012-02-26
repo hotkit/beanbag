@@ -12,6 +12,7 @@
 
 
 #include <fost/urlhandler>
+#include <fost/jsondb>
 
 
 namespace beanbag {
@@ -25,10 +26,19 @@ namespace beanbag {
         /// The standard view implementation operator
         std::pair<boost::shared_ptr<fostlib::mime>, int> operator () (
             const fostlib::json &options, const fostlib::string &pathname,
-            fostlib::http::server::request &req,
-            const fostlib::host &
-        ) const;
+            fostlib::http::server::request &req, const fostlib::host &) const;
 
+        /// Return the JSON that will form the basis of a GET response
+        virtual fostlib::json get(
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
+
+        /// Return the JSON that will form the basis of the PUT response
+        virtual fostlib::json put(
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
     };
 
 
