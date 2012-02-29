@@ -8,6 +8,7 @@
 
 #include <beanbag/raw.hpp>
 #include <fost/exception/parse_error.hpp>
+#include <fost/crypto>
 #include "databases.hpp"
 
 
@@ -24,6 +25,7 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     const fostlib::json &options, const fostlib::string &pathname,
     fostlib::http::server::request &req, const fostlib::host &host
 ) const {
+    fostlib::mime::mime_headers response_headers;
     fostlib::jsondb::local db(*beanbag::database(options["database"]));
     fostlib::string html(fostlib::utf::load_file(
         fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
@@ -50,24 +52,29 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
             fostlib::json::unparse(data_path, false));
 
         boost::shared_ptr<fostlib::mime> response(
-                new fostlib::text_body(
-                    html,
-                    fostlib::mime::mime_headers(), L"text/html" ));
+                new fostlib::text_body(html,
+                    response_headers, L"text/html" ));
         return std::make_pair(response, 200);
     } else if ( req.method() == "PUT" ) {
         fostlib::json data(put(options, pathname, req, host, db, position));
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
                     fostlib::json::unparse(data, true),
-                    fostlib::mime::mime_headers(), L"application/json" ));
+                    response_headers, L"application/json" ));
         return std::make_pair(response, 200);
     } else {
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
                     req.method() + " not supported",
-                    fostlib::mime::mime_headers(), L"text/plain" ));
+                    response_headers, L"text/plain" ));
         return std::make_pair(response, 403);
     }
+}
+
+
+fostlib::string beanbag::raw_view::etag(const fostlib::json &structure) {
+    fostlib::string json_string = fostlib::json::unparse(structure, false);
+    return fostlib::md5(json_string);
 }
 
 
