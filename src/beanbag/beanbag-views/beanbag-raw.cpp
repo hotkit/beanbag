@@ -26,9 +26,11 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     fostlib::http::server::request &req, const fostlib::host &host
 ) const {
     fostlib::mime::mime_headers response_headers;
-    fostlib::jsondb::local db(*beanbag::database(options["database"]));
-    fostlib::string html(fostlib::utf::load_file(
-        fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
+    // We need to hold the shared_ptr for as long as we have the local
+    // otherwise the database may get garbage collected whilst we're using
+    // it
+    boost::shared_ptr<fostlib::jsondb> db_ptr = beanbag::database(options["database"]);
+    fostlib::jsondb::local db(*db_ptr);
 
     fostlib::split_type path = fostlib::split(pathname, "/");
     fostlib::json data_path; fostlib::jcursor position;
@@ -46,22 +48,12 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
 
     if ( req.method() == "GET" ) {
         fostlib::json data(get(options, pathname, req, host, db, position));
-        html = replaceAll(html, "[[data]]",
-            fostlib::json::unparse(data, true));
-        html = replaceAll(html, "[[path]]",
-            fostlib::json::unparse(data_path, false));
-
-        boost::shared_ptr<fostlib::mime> response(
-                new fostlib::text_body(html,
-                    response_headers, L"text/html" ));
-        return std::make_pair(response, 200);
+        return std::make_pair(html_response(options,
+                data, response_headers, data_path, position), 200);
     } else if ( req.method() == "PUT" ) {
         fostlib::json data(put(options, pathname, req, host, db, position));
-        boost::shared_ptr<fostlib::mime> response(
-                new fostlib::text_body(
-                    fostlib::json::unparse(data, true),
-                    response_headers, L"application/json" ));
-        return std::make_pair(response, 200);
+        return std::make_pair(json_response(options,
+                data, response_headers, data_path, position), 200);
     } else {
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
@@ -72,7 +64,7 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
 }
 
 
-fostlib::string beanbag::raw_view::etag(const fostlib::json &structure) {
+fostlib::string beanbag::raw_view::etag(const fostlib::json &structure) const {
     fostlib::string json_string = fostlib::json::unparse(structure, false);
     return fostlib::md5(json_string);
 }
@@ -102,4 +94,31 @@ fostlib::json beanbag::raw_view::put(
         db.insert(position, new_data);
     db.commit();
     return get(options, pathname, req, host, db, position);
+}
+
+
+boost::shared_ptr<fostlib::mime> beanbag::raw_view::json_response(
+        const fostlib::json &options,
+        const fostlib::json &body, fostlib::mime::mime_headers &headers,
+        const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
+    return boost::shared_ptr<fostlib::mime>( new fostlib::text_body(
+        fostlib::json::unparse(body, true), headers, L"text/x-json" ) );
+}
+
+
+boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
+        const fostlib::json &options,
+        const fostlib::json &body, fostlib::mime::mime_headers &headers,
+        const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
+    fostlib::string html(fostlib::utf::load_file(
+        fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
+
+    html = replaceAll(html, "[[data]]",
+        fostlib::json::unparse(body, true));
+    html = replaceAll(html, "[[path]]",
+        fostlib::json::unparse(position_js, false));
+
+    return boost::shared_ptr<fostlib::mime>(
+            new fostlib::text_body(html,
+                headers, L"text/html" ));
 }
