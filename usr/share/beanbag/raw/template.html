@@ -35,6 +35,10 @@
                         data: $("#data").val(),
                         dataType: "text",
                         type: "PUT",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
                         success: function(data) {
                             $("#data").val(data);
                             self.$apply(function() {
