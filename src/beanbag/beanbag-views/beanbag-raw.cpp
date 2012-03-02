@@ -29,7 +29,8 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     // We need to hold the shared_ptr for as long as we have the local
     // otherwise the database may get garbage collected whilst we're using
     // it
-    boost::shared_ptr<fostlib::jsondb> db_ptr = beanbag::database(options["database"]);
+    boost::shared_ptr<fostlib::jsondb> db_ptr =
+        beanbag::database(options["database"]);
     fostlib::jsondb::local db(*db_ptr);
 
     fostlib::split_type path = fostlib::split(pathname, "/");
@@ -117,6 +118,8 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
         fostlib::json::unparse(body, true));
     html = replaceAll(html, "[[path]]",
         fostlib::json::unparse(position_js, false));
+
+    headers.set("ETag", "\"" + fostlib::md5(html) + "\"");
 
     return boost::shared_ptr<fostlib::mime>(
             new fostlib::text_body(html,
