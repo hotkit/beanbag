@@ -58,17 +58,23 @@ const class beanbag_raw : public fostlib::urlhandler::view {
                 }
                 return std::make_pair(response, 200);
             } else if ( req.method() == "PUT" ) {
+                int status = 200;
                 boost::shared_ptr< fostlib::binary_body > data(req.data());
                 fostlib::string json_string = fostlib::coerce<fostlib::string>(
                     data->data());
                 fostlib::json new_data = fostlib::json::parse(json_string);
-                db.update(position, new_data);
+                if ( db.has_key(position) )
+                    db.update(position, new_data);
+                else {
+                    status = 201;
+                    db.insert(position, new_data);
+                }
                 db.commit();
                 boost::shared_ptr<fostlib::mime> response(
                         new fostlib::text_body(
                             fostlib::json::unparse(db[position], true),
                             fostlib::mime::mime_headers(), L"application/json" ));
-                return std::make_pair(response, 200);
+                return std::make_pair(response, status);
             } else {
                 boost::shared_ptr<fostlib::mime> response(
                         new fostlib::text_body(
