@@ -8,6 +8,7 @@
 
 #include <fost/test>
 #include "databases.hpp"
+#include <beanbag/beanbag>
 
 
 FSL_TEST_SUITE(beanbag_raw);
@@ -16,5 +17,6 @@ FSL_TEST_SUITE(beanbag_raw);
 FSL_TEST_FUNCTION(get_has_etag) {
     fostlib::json config;
     beanbag::test_database("get_has_etag", config);
+    const beanbag::raw_view view("beanbag.test.get_has_etag");
 }
 
