@@ -47,21 +47,24 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
         }
     }
 
-    if ( req.method() == "GET" ) {
-        fostlib::json data(get(options, pathname, req, host, db, position));
-        return std::make_pair(html_response(options,
-                data, response_headers, data_path, position), 200);
-    } else if ( req.method() == "PUT" ) {
-        fostlib::json data(put(options, pathname, req, host, db, position));
-        return std::make_pair(json_response(options,
-                data, response_headers, data_path, position), 200);
-    } else {
+    fostlib::json data;
+    if ( req.method() == "GET" )
+        data = get(options, pathname, req, host, db, position);
+    else if ( req.method() == "PUT" )
+        data = put(options, pathname, req, host, db, position);
+    else {
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
                     req.method() + " not supported",
                     response_headers, L"text/plain" ));
         return std::make_pair(response, 403);
     }
+    if ( req.query_string().isnull() )
+        return std::make_pair(html_response(options,
+                data, response_headers, data_path, position), 200);
+    else
+        return std::make_pair(json_response(options,
+                data, response_headers, data_path, position), 200);
 }
 
 
