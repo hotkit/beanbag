@@ -1,3 +1,6 @@
+2012-03-02  Kirit Saelensminde  <kirit@felspar.com>
+ Any query string at all will force JSON response (as text/plain for now). For future compatibility use __ as the query string key. I.e. http://localhost:8080/?__=
+
 2012-02-26  Kirit Saelensminde  <kirit@felspar.com>
  Added a raw JSON editor.
  Added ChangeLog
