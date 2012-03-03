@@ -32,7 +32,8 @@ namespace {
 
         void do_request(
                 const fostlib::string &method,
-                const fostlib::string &pathname) {
+                const fostlib::string &pathname,
+                const fostlib::ascii_printable_string &query_string = "") {
             std::auto_ptr< fostlib::binary_body > body(new fostlib::binary_body());
             fostlib::http::server::request req(
                 method, fostlib::coerce<fostlib::url::filepath_string>(pathname), body);
@@ -45,10 +46,27 @@ namespace {
 }
 
 
-FSL_TEST_FUNCTION(get_has_etag) {
+FSL_TEST_FUNCTION(get_html_has_etag) {
     setup env;
     env.do_request("GET", "/");
     FSL_CHECK_EQ(env.status, 200);
+    FSL_CHECK_EQ(
+        env.response->headers()["Content-Type"].value(),
+        "text/html");
     FSL_CHECK(env.response->headers().exists("ETag"));
 }
+
+
+// FSL_TEST_FUNCTION(get_json_has_etag) {
+//     setup env;
+//     env.do_request("GET", "/", "__=");
+//     FSL_CHECK_EQ(env.status, 200);
+//     FSL_CHECK_EQ(
+//         env.response->headers()["Content-Type"].value(),
+//         "application/json");
+//     FSL_CHECK(env.response->headers().exists("ETag"));
+//     FSL_CHECK_EQ(
+//         env.response->headers()["ETag"].value(),
+//         "\"674441960ca1ba2de08ad4e50c9fde98\"");
+// }
 

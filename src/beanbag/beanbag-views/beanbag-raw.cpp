@@ -70,7 +70,7 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
 
 fostlib::string beanbag::raw_view::etag(const fostlib::json &structure) const {
     fostlib::string json_string = fostlib::json::unparse(structure, false);
-    return fostlib::md5(json_string);
+    return "\"" + fostlib::md5(json_string) + "\"";
 }
 
 
@@ -105,6 +105,7 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::json_response(
         const fostlib::json &options,
         const fostlib::json &body, fostlib::mime::mime_headers &headers,
         const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
+    headers.set("ETag", etag(body));
     return boost::shared_ptr<fostlib::mime>( new fostlib::text_body(
         fostlib::json::unparse(body, true), headers, L"text/x-json" ) );
 }
