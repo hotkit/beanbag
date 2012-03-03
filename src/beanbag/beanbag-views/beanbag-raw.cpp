@@ -9,6 +9,8 @@
 #include <beanbag/raw.hpp>
 #include <fost/exception/parse_error.hpp>
 #include <fost/crypto>
+#include <fost/log>
+#include <fost/insert>
 #include "databases.hpp"
 
 
@@ -25,6 +27,8 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     const fostlib::json &options, const fostlib::string &pathname,
     fostlib::http::server::request &req, const fostlib::host &host
 ) const {
+    fostlib::json log;
+
     fostlib::mime::mime_headers response_headers;
     // We need to hold the shared_ptr for as long as we have the local
     // otherwise the database may get garbage collected whilst we're using
@@ -46,6 +50,7 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
             position /= *part;
         }
     }
+    fostlib::insert(log, "jcursor", data_path);
 
     fostlib::json data;
     if ( req.method() == "GET" )
@@ -59,11 +64,17 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
                     response_headers, L"text/plain" ));
         return std::make_pair(response, 403);
     }
-    if ( req.query_string().isnull() )
-        return std::make_pair(html_response(options,
+    fostlib::string accept(
+        req.data()->headers().exists("Accept") ?
+            req.data()->headers()["Accept"].value() : "*/*");
+    fostlib::insert(log, "accept", accept);
+    fostlib::logging::debug(log);
+    if ( !req.query_string().isnull()
+            || accept.find("application/json") < accept.find("text/html") )
+        return std::make_pair(json_response(options,
                 data, response_headers, data_path, position), 200);
     else
-        return std::make_pair(json_response(options,
+        return std::make_pair(html_response(options,
                 data, response_headers, data_path, position), 200);
 }
 

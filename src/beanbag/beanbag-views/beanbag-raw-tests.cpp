@@ -33,8 +33,7 @@ namespace {
 
         void do_request(
                 const fostlib::string &method,
-                const fostlib::string &pathname,
-                const fostlib::ascii_printable_string &query_string = "") {
+                const fostlib::string &pathname) {
             std::auto_ptr< fostlib::binary_body > body(new fostlib::binary_body(headers));
             fostlib::http::server::request req(
                 method, fostlib::coerce<fostlib::url::filepath_string>(pathname), body);
@@ -58,16 +57,17 @@ FSL_TEST_FUNCTION(get_html_has_etag) {
 }
 
 
-// FSL_TEST_FUNCTION(get_json_has_etag) {
-//     setup env;
-//     env.do_request("GET", "/", "__=");
-//     FSL_CHECK_EQ(env.status, 200);
-//     FSL_CHECK_EQ(
-//         env.response->headers()["Content-Type"].value(),
-//         "application/json");
-//     FSL_CHECK(env.response->headers().exists("ETag"));
-//     FSL_CHECK_EQ(
-//         env.response->headers()["ETag"].value(),
-//         "\"37a6259cc0c1dae299a7866489dff0bd\"");
-// }
+FSL_TEST_FUNCTION(get_json_has_etag) {
+    setup env;
+    env.headers.set("Accept", "application/json");
+    env.do_request("GET", "/");
+    FSL_CHECK_EQ(env.status, 200);
+    FSL_CHECK_EQ(
+        env.response->headers()["Content-Type"].value(),
+        "application/json");
+    FSL_CHECK(env.response->headers().exists("ETag"));
+    FSL_CHECK_EQ(
+        env.response->headers()["ETag"].value(),
+        "\"37a6259cc0c1dae299a7866489dff0bd\"");
+}
 

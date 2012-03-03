@@ -32,7 +32,7 @@
                 };
                 self.update_classification();
                 self.update = function() {
-                    $.ajax(document.URL + "?__=", {
+                    $.ajax(document.URL, {
                         data: $("#data").val(),
                         dataType: "text",
                         type: "PUT",
