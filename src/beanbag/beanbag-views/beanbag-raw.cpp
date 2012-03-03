@@ -107,7 +107,7 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::json_response(
         const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
     headers.set("ETag", etag(body));
     return boost::shared_ptr<fostlib::mime>( new fostlib::text_body(
-        fostlib::json::unparse(body, true), headers, L"text/x-json" ) );
+        fostlib::json::unparse(body, true), headers, L"application/json" ) );
 }
 
 
