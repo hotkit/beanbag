@@ -20,6 +20,7 @@
             function data_editor() {
                 var self = this;
                 self.data = [[data]];
+                self.version = '[[etag]]';
                 self.update_classification = function() {
                     if ( angular.isObject(self.data) )
                         self.root_type = 'object';
@@ -39,10 +40,11 @@
                             Accept: "application/json",
                             "Content-Type": "application/json",
                         },
-                        success: function(data) {
+                        success: function(data, status, xhr) {
                             $("#data").val(data);
                             self.$apply(function() {
                                 self.data = $.parseJSON(data);
+                                self.version = xhr.getResponseHeader("ETag");
                                 self.update_classification();
                             });
                         },
@@ -73,6 +75,7 @@
                 <textarea id="data" rows="20" cols="80">[[data]]</textarea>
                 <br />
                 <button>Save changes</button>
+                {{version}}
             </form>
         </div>
     </body>

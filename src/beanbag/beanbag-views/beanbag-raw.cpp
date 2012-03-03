@@ -122,6 +122,7 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
         fostlib::json::unparse(body, true));
     html = replaceAll(html, "[[path]]",
         fostlib::json::unparse(position_js, false));
+    html = replaceAll(html, "[[etag]]", etag(body));
 
     headers.set("ETag", "\"" + fostlib::md5(html) + "\"");
 
