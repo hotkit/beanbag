@@ -68,6 +68,6 @@ FSL_TEST_FUNCTION(get_html_has_etag) {
 //     FSL_CHECK(env.response->headers().exists("ETag"));
 //     FSL_CHECK_EQ(
 //         env.response->headers()["ETag"].value(),
-//         "\"674441960ca1ba2de08ad4e50c9fde98\"");
+//         "\"37a6259cc0c1dae299a7866489dff0bd\"");
 // }
 
