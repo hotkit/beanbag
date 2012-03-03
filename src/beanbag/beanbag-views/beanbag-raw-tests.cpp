@@ -25,6 +25,7 @@ namespace {
         }
 
         const beanbag::raw_view view;
+        fostlib::mime::mime_headers headers;
         fostlib::json config, options;
         fostlib::host host;
         int status;
@@ -34,7 +35,7 @@ namespace {
                 const fostlib::string &method,
                 const fostlib::string &pathname,
                 const fostlib::ascii_printable_string &query_string = "") {
-            std::auto_ptr< fostlib::binary_body > body(new fostlib::binary_body());
+            std::auto_ptr< fostlib::binary_body > body(new fostlib::binary_body(headers));
             fostlib::http::server::request req(
                 method, fostlib::coerce<fostlib::url::filepath_string>(pathname), body);
             std::pair<boost::shared_ptr<fostlib::mime>, int> res =
