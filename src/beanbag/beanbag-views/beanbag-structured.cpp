@@ -7,3 +7,14 @@
 
 
 #include <beanbag/structured.hpp>
+
+
+namespace {
+    const beanbag::structured_view c_view("beanbag.structured");
+}
+
+
+beanbag::structured_view::structured_view(const fostlib::string &name)
+: raw_view(name) {
+}
+

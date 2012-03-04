@@ -1,0 +1,83 @@
+<!doctype xhtml>
+<html xmlns:ng="http://angularjs.org" ng:app>
+    <head>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+            </script>
+        <script src="http://docs-next.angularjs.org/angular-0.10.6.min.js">
+            </script>
+        <script>
+            function breadcrumbs() {
+                var self = this;
+                var uri = '/', path = [[path]];
+                self.crumbs = [];
+                angular.forEach(path, function(value) {
+                    uri += value + '/';
+                    self.crumbs.push({
+                        name: value, uri: uri
+                    });
+                });
+            }
+            function data_editor() {
+                var self = this;
+                self.data = [[data]];
+                self.version = '[[etag]]';
+                self.update_classification = function() {
+                    if ( angular.isObject(self.data) )
+                        self.root_type = 'object';
+                    else if ( angular.isArray(self.data) )
+                        self.root_type = 'array';
+                    else
+                        self.root_type = 'atom';
+                    self.root_is_complex = (self.root_type != 'atom');
+                };
+                self.update_classification();
+                self.update = function() {
+                    $.ajax(document.URL, {
+                        data: $("#data").val(),
+                        dataType: "text",
+                        type: "PUT",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            "If-Match": self.version,
+                        },
+                        success: function(data, status, xhr) {
+                            $("#data").val(data);
+                            self.$apply(function() {
+                                self.data = $.parseJSON(data);
+                                self.version = xhr.getResponseHeader("ETag");
+                                self.update_classification();
+                            });
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(jqXHR.responseText);
+                        }
+                    });
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <p ng:controller="breadcrumbs">
+            <a href="/">home</a>
+            <span ng:repeat="part in crumbs"> &gt;
+                <a href={{part.uri}}>{{part.name}}</a></span>
+        </p>
+
+        <h1>JSON editor</h1>
+
+        <div ng:controller="data_editor">
+            <ng:switch on="root_is_complex">
+                <ul ng:switch-when="true">
+                    <li ng:repeat="(k, v) in data"><a href="{{k}}/">{{k}}</a></li>
+                </ul>
+            </ng:switch>
+            <form ng:submit="update()" id="data_fomr">
+                <textarea id="data" rows="20" cols="80">[[data]]</textarea>
+                <br />
+                <button>Save changes</button>
+                {{version}}
+            </form>
+        </div>
+    </body>
+</html>

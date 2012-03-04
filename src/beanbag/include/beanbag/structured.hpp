@@ -17,6 +17,12 @@
 namespace beanbag {
 
 
+    class structured_view : public raw_view {
+    public:
+        structured_view(const fostlib::string &name);
+    };
+
+
 }
 
 
