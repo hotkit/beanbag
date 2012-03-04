@@ -3,7 +3,12 @@ body {
     margin: 1em;
     font-family: sans-serif;
 }
-
+em {
+    font-style: italic;
+}
+strong {
+    font-weight: bold;
+}
 
 .crumbs {
     font-size: small;
@@ -41,6 +46,14 @@ div.content {
 }
 .content p {
     padding-bottom: 0.4em;
+}
+.content ul {
+    margin-left: 1em;
+    list-style-position: outside;
+    list-style-type: disc;
+}
+.content li {
+    margin-bottom: 0.4em;
 }
 
 

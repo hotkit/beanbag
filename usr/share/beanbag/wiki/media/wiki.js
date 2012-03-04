@@ -37,3 +37,28 @@ function WikiController($location, $http) {
 }
 
 WikiController.$inject = ['$location', '$http'];
+
+
+
+// --- Custom TinyMCE Service --- //
+// http://jsfiddle.net/ProLoser/nTzRA/
+angular.directive('ui:tinymce', function(expression, config) {
+    return function(element) {
+        element.tinymce({
+            // Location of TinyMCE script
+            script_url: 'http://resources.holycrap.ws/jscripts/tiny_mce/tiny_mce.js',
+
+            // General options
+            theme: "simple",
+
+            // Update Textarea and Trigger change event
+            handle_event_callback: function(e) {
+                if (this.isDirty()) {
+                    this.save();
+                    element.trigger('change');
+                }
+                return true;
+            }
+        });
+    };
+});

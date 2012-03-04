@@ -5,6 +5,8 @@
             </script>
         <script src="http://docs-next.angularjs.org/angular-0.10.6.min.js">
             </script>
+        <script src="http://resources.holycrap.ws/jscripts/tiny_mce/jquery.tinymce.js">
+            </script>
         <script src="/_/wiki.js"></script>
         <link rel="stylesheet" type="text/css" href="/_/reset.css" />
         <link rel="stylesheet" type="text/css" href="/_/wiki.css" />
@@ -28,7 +30,7 @@
                 <div ng:switch-when="show">{{page.content | html}}</div>
                 <div ng:switch-when="edit">
                     <form ng:submit="savepage()">
-                        <textarea type="text" ng:model="page.content"></textarea>
+                        <textarea ui:tinymce ng:model="page.content"></textarea>
                         <button>Save</button>
                     </form>
                 </div>
