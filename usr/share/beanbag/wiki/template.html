@@ -19,6 +19,11 @@
             <h1 ng:switch-default ng:click="editors.title=true">{{page.title}}</h1>
         </ng:switch>
         <hr />
+        <ul class="tabs">
+            <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
+            <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
+        </ul>
+        <hr />
         <dl class="footer">
             <dt>Version</dt>
                 <dd>{{meta.version}}</dd>

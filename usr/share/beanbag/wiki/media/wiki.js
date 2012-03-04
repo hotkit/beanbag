@@ -32,6 +32,7 @@ function WikiController($location, $http) {
                 console.log("error", data, status, headers, config);
             });
     }
+    self.tab = 'show';
 }
 
 WikiController.$inject = ['$location', '$http'];

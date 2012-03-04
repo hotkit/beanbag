@@ -4,10 +4,12 @@ body {
     font-family: sans-serif;
 }
 
+
 .crumbs {
     font-size: small;
     margin-bottom: 0.6em;
 }
+
 
 h1 {
     font-size: 1.5em;
@@ -16,6 +18,17 @@ h1 {
 .title input {
     font-size: 1.5em;
     padding-bottom: 1px;
+}
+
+
+.tabs li {
+    background: #eee;
+    display: inline;
+    margin-right: 3em;
+    padding: 0 1em;
+}
+.tabs li.show-show, .tabs li.edit-edit {
+    background: #cee;
 }
 
 
