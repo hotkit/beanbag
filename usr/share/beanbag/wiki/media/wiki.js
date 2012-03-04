@@ -7,19 +7,31 @@ function WikiController($location, $http) {
     console.log($location.path());
 
     this.editors = {
-        "title": false,
-    };
+        "title": false};
+    this.meta = {}
+    this.page = {}
     this.loadpage = function() {
-        $http({method:"GET", url: $location.path()}).
+        $http.get($location.path()).
             success(function(data, status, headers, config) {
                 self.page = data[""];
-                self.version = headers()["etag"];
+                self.meta.version = headers()["etag"];
             }).
             error(function(data, status, headers, config) {
                 console.log("error", data, status, headers, config);
             });
     }
     this.loadpage();
+    this.savepage = function() {
+        $http.put($location.path(), {"":this.page},
+                {headers:{'If-Match': self.meta.version}}).
+            success(function(data, status, headers, config) {
+                self.editors.title = false;
+                self.meta.version = headers()["etag"];
+            }).
+            error(function(data, status, headers, config) {
+                console.log("error", data, status, headers, config);
+            });
+    }
 }
 
 WikiController.$inject = ['$location', '$http'];

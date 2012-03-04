@@ -1,0 +1,27 @@
+
+body {
+    margin: 1em;
+    font-family: sans-serif;
+}
+
+.crumbs {
+    font-size: small;
+    margin-bottom: 0.6em;
+}
+
+h1 {
+    font-size: 1.5em;
+    padding: 3px 1px;
+}
+.title input {
+    font-size: 1.5em;
+    padding-bottom: 1px;
+}
+
+
+.footer {
+    font-size: small;
+}
+.footer dd {
+    margin-left: 1em;
+}

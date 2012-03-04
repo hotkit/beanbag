@@ -5,8 +5,23 @@
             </script>
         <script src="http://docs-next.angularjs.org/angular-0.10.6.min.js">
             </script>
-        <script src="_/wiki.js"></script>
+        <script src="/_/wiki.js"></script>
+        <link rel="stylesheet" type="text/css" href="/_/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/_/wiki.css" />
     </head>
-    <body>
+    <body ng:controller="WikiController">
+        <p class="crumbs"><a href="/">Home</a></p>
+        <ng:switch on="editors.title">
+            <form class="title" ng:switch-when="true" ng:submit="savepage()">
+                <input type="text" ng:model="page.title"autofocus="autofocus">
+                <button>Save</button>
+            </form>
+            <h1 ng:switch-default ng:click="editors.title=true">{{page.title}}</h1>
+        </ng:switch>
+        <hr />
+        <dl class="footer">
+            <dt>Version</dt>
+                <dd>{{meta.version}}</dd>
+        </dl>
     </body>
 </html>
