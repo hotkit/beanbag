@@ -23,6 +23,17 @@
             <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
             <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
         </ul>
+        <div class="content">
+            <ng:switch on="tab">
+                <div ng:switch-when="show">{{page.content | html}}</div>
+                <div ng:switch-when="edit">
+                    <form ng:submit="savepage()">
+                        <textarea type="text" ng:model="page.content"></textarea>
+                        <button>Save</button>
+                    </form>
+                </div>
+            </ng:switch>
+        </div>
         <hr />
         <dl class="footer">
             <dt>Version</dt>

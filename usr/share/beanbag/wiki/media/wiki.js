@@ -26,6 +26,7 @@ function WikiController($location, $http) {
                 {headers:{'If-Match': self.meta.version}}).
             success(function(data, status, headers, config) {
                 self.editors.title = false;
+                self.tab = 'show';
                 self.meta.version = headers()["etag"];
             }).
             error(function(data, status, headers, config) {
