@@ -151,17 +151,24 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
         const fostlib::json &options,
         const fostlib::json &body, fostlib::mime::mime_headers &headers,
         const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
-    fostlib::string html(fostlib::utf::load_file(
-        fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"])));
+    fostlib::string html;
+    if ( options["html"].has_key("redirect") ) {
+        if ( position_jc == fostlib::jcursor() )
+            html = fostlib::utf::load_file(
+                fostlib::coerce<boost::filesystem::wpath>(
+                    options["html"]["redirect"]["root"]));
+    } else {
+        html = fostlib::utf::load_file(
+            fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"]));
 
-    html = replaceAll(html, "[[data]]",
-        fostlib::json::unparse(body, true));
-    html = replaceAll(html, "[[path]]",
-        fostlib::json::unparse(position_js, false));
-    html = replaceAll(html, "[[etag]]", etag(body));
+        html = replaceAll(html, "[[data]]",
+            fostlib::json::unparse(body, true));
+        html = replaceAll(html, "[[path]]",
+            fostlib::json::unparse(position_js, false));
+        html = replaceAll(html, "[[etag]]", etag(body));
 
-    headers.set("ETag", "\"" + fostlib::md5(html) + "\"");
-
+        headers.set("ETag", "\"" + fostlib::md5(html) + "\"");
+    }
     return boost::shared_ptr<fostlib::mime>(
             new fostlib::text_body(html,
                 headers, L"text/html" ));
