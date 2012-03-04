@@ -64,18 +64,26 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
                     response_headers, L"text/plain" ));
         return std::make_pair(response, 403);
     }
+    fostlib::insert(log, "status-code", data.second);
     fostlib::string accept(
         req.data()->headers().exists("Accept") ?
             req.data()->headers()["Accept"].value() : "*/*");
     fostlib::insert(log, "accept", accept);
     fostlib::logging::debug(log);
-    if ( !req.query_string().isnull()
-            || accept.find("application/json") < accept.find("text/html") )
-        return std::make_pair(json_response(options,
-                data.first, response_headers, data_path, position), data.second);
-    else
-        return std::make_pair(html_response(options,
-                data.first, response_headers, data_path, position), data.second);
+    if ( data.second < 300 ) {
+        if ( !req.query_string().isnull()
+                || accept.find("application/json") < accept.find("text/html") )
+            return std::make_pair(json_response(options,
+                    data.first, response_headers, data_path, position), data.second);
+        else
+            return std::make_pair(html_response(options,
+                    data.first, response_headers, data_path, position), data.second);
+    } else {
+        fostlib::string view_name = "fost.response." +
+            fostlib::coerce<fostlib::string>(data.second);
+        std::pair<fostlib::string, fostlib::json> view = find_view(view_name);
+        return view_for(view.first)(view.second, pathname, req, host);
+    }
 }
 
 

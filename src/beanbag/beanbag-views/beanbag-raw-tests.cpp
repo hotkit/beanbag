@@ -55,6 +55,9 @@ FSL_TEST_FUNCTION(get_non_existent_path_returns_404) {
     setup env;
     env.do_request("GET", "/not/a/path/");
     FSL_CHECK_EQ(env.status, 404);
+    FSL_CHECK(
+        fostlib::coerce<fostlib::string>(*env.response).find(
+            "Resource not found") != fostlib::string::npos);
 }
 
 
