@@ -3,7 +3,7 @@
         "load": ["libbeanbag-views-d.so"],
 
         "hosts": {
-            "localhost:8080": "raw"
+            "": "raw"
         },
 
         "views": {

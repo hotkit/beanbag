@@ -19,7 +19,12 @@ namespace {
 
 boost::shared_ptr< fostlib::jsondb > beanbag::database(
         const fostlib::json &which) {
-    fostlib::string name(fostlib::coerce<fostlib::string>(which["name"]));
+    fostlib::nullable<fostlib::string> which_name(which.get<fostlib::string>());
+    fostlib::string name;
+    if ( which_name.isnull() )
+        name = fostlib::coerce<fostlib::string>(which["name"]);
+    else
+        name = which_name.value();
 
     boost::mutex::scoped_lock lock(g_mutex);
     databases_t::const_iterator loc(g_databases.find(name));
@@ -36,3 +41,14 @@ boost::shared_ptr< fostlib::jsondb > beanbag::database(
     } else
         return loc->second;
 }
+
+
+void beanbag::test_database(const fostlib::string &name, const fostlib::json &blob) {
+    boost::mutex::scoped_lock lock(g_mutex);
+    boost::shared_ptr< fostlib::jsondb > db(new fostlib::jsondb);
+    fostlib::jsondb::local transaction(*db);
+    transaction.insert(fostlib::jcursor(), blob);
+    transaction.commit();
+    g_databases[name] = db;
+}
+
