@@ -18,7 +18,6 @@ namespace {
     struct setup {
         setup()
         : view("beanbag.test"), status(0) {
-            beanbag::test_database("beanbag.test", config);
             fostlib::insert(options, "database", "beanbag.test");
             fostlib::insert(options, "html", "template",
                 "../../usr/share/beanbag/raw/template.html");
@@ -26,7 +25,7 @@ namespace {
 
         const beanbag::raw_view view;
         fostlib::mime::mime_headers headers;
-        fostlib::json config, options;
+        fostlib::json database, options;
         fostlib::host host;
         int status;
         boost::shared_ptr<fostlib::mime> response;
@@ -35,6 +34,7 @@ namespace {
                 const fostlib::string &method,
                 const fostlib::string &pathname,
                 const fostlib::string &body_data = fostlib::string() ) {
+            beanbag::test_database("beanbag.test", database);
             std::auto_ptr< fostlib::binary_body > body(
                 new fostlib::binary_body(
                     fostlib::coerce< std::vector<unsigned char> >(
@@ -48,6 +48,24 @@ namespace {
             status = res.second;
         }
     };
+}
+
+
+FSL_TEST_FUNCTION(get_non_existent_path_returns_404) {
+    setup env;
+    env.do_request("GET", "/not/a/path/");
+    FSL_CHECK_EQ(env.status, 404);
+}
+
+
+FSL_TEST_FUNCTION(get_with_path_gives_200) {
+    setup env;
+    env.headers.set("Accept", "application/json");
+    fostlib::insert(env.database, "is", "a", "path", true);
+    env.do_request("GET", "/is/a/path/");
+    FSL_CHECK_EQ(env.status, 200);
+    FSL_CHECK_EQ("true\n",
+        fostlib::coerce<fostlib::string>(*env.response));
 }
 
 

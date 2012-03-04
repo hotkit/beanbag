@@ -90,7 +90,10 @@ std::pair<fostlib::json, int> beanbag::raw_view::get(
     fostlib::http::server::request &, const fostlib::host &,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
 ) const {
-    return std::make_pair(db[position], 200);
+    if ( position == fostlib::jcursor() || db.has_key(position) )
+        return std::make_pair(db[position], 200);
+    else
+        return std::make_pair(fostlib::json(), 404);
 }
 
 
