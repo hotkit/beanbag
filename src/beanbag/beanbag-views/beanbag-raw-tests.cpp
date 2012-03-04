@@ -33,8 +33,13 @@ namespace {
 
         void do_request(
                 const fostlib::string &method,
-                const fostlib::string &pathname) {
-            std::auto_ptr< fostlib::binary_body > body(new fostlib::binary_body(headers));
+                const fostlib::string &pathname,
+                const fostlib::string &body_data = fostlib::string() ) {
+            std::auto_ptr< fostlib::binary_body > body(
+                new fostlib::binary_body(
+                    fostlib::coerce< std::vector<unsigned char> >(
+                        fostlib::coerce<fostlib::utf8_string>(body_data)),
+                    headers));
             fostlib::http::server::request req(
                 method, fostlib::coerce<fostlib::url::filepath_string>(pathname), body);
             std::pair<boost::shared_ptr<fostlib::mime>, int> res =
@@ -69,5 +74,17 @@ FSL_TEST_FUNCTION(get_json_has_etag) {
     FSL_CHECK_EQ(
         env.response->headers()["ETag"].value(),
         "\"37a6259cc0c1dae299a7866489dff0bd\"");
+}
+
+
+FSL_TEST_FUNCTION(put_to_new_path) {
+    setup put;
+    put.headers.set("Accept", "application/json");
+    put.do_request("PUT", "/new/path/3/", "null");
+    FSL_CHECK_EQ(put.status, 201);
+    FSL_CHECK_EQ(
+        put.response->headers()["Content-Type"].value(),
+        "application/json");
+    FSL_CHECK(put.response->headers().exists("ETag"));
 }
 

@@ -52,7 +52,7 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     }
     fostlib::insert(log, "jcursor", data_path);
 
-    fostlib::json data;
+    std::pair<fostlib::json, int> data;
     if ( req.method() == "GET" )
         data = get(options, pathname, req, host, db, position);
     else if ( req.method() == "PUT" )
@@ -72,10 +72,10 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     if ( !req.query_string().isnull()
             || accept.find("application/json") < accept.find("text/html") )
         return std::make_pair(json_response(options,
-                data, response_headers, data_path, position), 200);
+                data.first, response_headers, data_path, position), data.second);
     else
         return std::make_pair(html_response(options,
-                data, response_headers, data_path, position), 200);
+                data.first, response_headers, data_path, position), data.second);
 }
 
 
@@ -85,30 +85,33 @@ fostlib::string beanbag::raw_view::etag(const fostlib::json &structure) const {
 }
 
 
-fostlib::json beanbag::raw_view::get(
+std::pair<fostlib::json, int> beanbag::raw_view::get(
     const fostlib::json &, const fostlib::string &,
     fostlib::http::server::request &, const fostlib::host &,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
 ) const {
-    return db[position];
+    return std::make_pair(db[position], 200);
 }
 
 
-fostlib::json beanbag::raw_view::put(
+std::pair<fostlib::json, int> beanbag::raw_view::put(
     const fostlib::json &options, const fostlib::string &pathname,
     fostlib::http::server::request &req, const fostlib::host &host,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
 ) const {
+    int status = 200;
     boost::shared_ptr< fostlib::binary_body > data(req.data());
     fostlib::string json_string = fostlib::coerce<fostlib::string>(
         data->data());
     fostlib::json new_data = fostlib::json::parse(json_string);
     if ( db.has_key(position) )
         db.update(position, new_data);
-    else
+    else {
+        status = 201;
         db.insert(position, new_data);
+    }
     db.commit();
-    return get(options, pathname, req, host, db, position);
+    return std::make_pair(db[position], status);
 }
 
 
