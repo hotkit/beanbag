@@ -113,3 +113,52 @@ FSL_TEST_FUNCTION(put_to_new_path) {
     FSL_CHECK(put.response->headers().exists("ETag"));
 }
 
+
+FSL_TEST_FUNCTION(conditional_put_matches) {
+    setup put;
+    put.headers.set("Accept", "application/json");
+    put.headers.set("If-Match", "\"37a6259cc0c1dae299a7866489dff0bd\"");
+    put.do_request("PUT", "/", "[]");
+    FSL_CHECK_EQ(put.status, 201);
+    FSL_CHECK_EQ(
+        put.response->headers()["Content-Type"].value(),
+        "application/json");
+}
+
+
+FSL_TEST_FUNCTION(conditional_put_does_not_match) {
+    setup put;
+    put.headers.set("Accept", "application/json");
+    put.headers.set("If-Match", "\"invalid-etag-value\"");
+    put.do_request("PUT", "/", "[]");
+    FSL_CHECK_EQ(put.status, 412);
+    FSL_CHECK_EQ(
+        put.response->headers()["Content-Type"].value(),
+        "text/html");
+}
+
+
+FSL_TEST_FUNCTION(conditional_put_matches_wildcard) {
+    setup put;
+    fostlib::insert(put.database, "path", fostlib::json());
+    put.headers.set("Accept", "application/json");
+    put.headers.set("If-Match", "*");
+    put.do_request("PUT", "/path/", "[]");
+    FSL_CHECK_EQ(put.status, 200);
+    FSL_CHECK_EQ(
+        put.response->headers()["Content-Type"].value(),
+        "application/json");
+}
+
+
+FSL_TEST_FUNCTION(conditional_put_does_not_match_wildcard) {
+    setup put;
+    put.headers.set("Accept", "application/json");
+    put.headers.set("If-Match", "*");
+    put.do_request("PUT", "/path/", "[]");
+    FSL_CHECK_EQ(put.status, 412);
+    FSL_CHECK_EQ(
+        put.response->headers()["Content-Type"].value(),
+        "text/html");
+}
+

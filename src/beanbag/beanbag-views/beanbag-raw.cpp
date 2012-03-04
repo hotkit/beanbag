@@ -115,14 +115,25 @@ std::pair<fostlib::json, int> beanbag::raw_view::put(
     fostlib::string json_string = fostlib::coerce<fostlib::string>(
         data->data());
     fostlib::json new_data = fostlib::json::parse(json_string);
-    if ( db.has_key(position) )
-        db.update(position, new_data);
-    else {
-        status = 201;
-        db.insert(position, new_data);
+    if ( req.data()->headers().exists("If-Match") ) {
+        fostlib::string ifmatch = req.data()->headers()["If-Match"].value();
+        if ( ifmatch  == "*" ) {
+            if ( !db.has_key(position) )
+                status = 412;
+        } else if ( ifmatch.find(etag(db[position])) == fostlib::string::npos )
+            status = 412;
     }
-    db.commit();
-    return std::make_pair(db[position], status);
+    if ( status != 412 ) {
+        if ( db.has_key(position) )
+            db.update(position, new_data);
+        else {
+            status = 201;
+            db.insert(position, new_data);
+        }
+        db.commit();
+        return std::make_pair(db[position], status);
+    }
+    return std::make_pair(fostlib::json(), status);
 }
 
 
