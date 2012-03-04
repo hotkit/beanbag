@@ -39,6 +39,7 @@
                         headers: {
                             Accept: "application/json",
                             "Content-Type": "application/json",
+                            "If-Match": self.version,
                         },
                         success: function(data, status, xhr) {
                             $("#data").val(data);
