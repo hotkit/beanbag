@@ -8,6 +8,13 @@
 
         "views": {
             "wiki": {
+                "view": "fost.view.pathprefix",
+                "configuration": {
+                    "" : "data",
+                    "_/": "static"
+                }
+            },
+            "data": {
                 "view": "beanbag.structured",
                 "configuration": {
                     "database": {
@@ -16,11 +23,16 @@
                         "template": "usr/share/beanbag/wiki/database.json"
                     },
                     "html": {
-                        "template": "usr/share/beanbag/wiki/template.html",
                         "redirect": {
                             "root": "usr/share/beanbag/wiki/template.html"
                         }
                     }
+                }
+            },
+            "static": {
+                "view": "fost.static",
+                "configuration": {
+                    "root": "usr/share/beanbag/wiki/media/"
                 }
             }
         }
