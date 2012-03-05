@@ -43,17 +43,21 @@ namespace beanbag {
         /// Return the ETag for the specified part of the JSON structure
         virtual fostlib::string etag(const fostlib::json &structure) const;
 
+        /// Calculate the position into the JSON structure for the given path
+        virtual fostlib::jcursor position(const fostlib::string &pathname,
+            fostlib::jsondb::local &db) const;
+
         /// Prepare a JSON response
         virtual boost::shared_ptr<fostlib::mime> json_response(
             const fostlib::json &options,
             const fostlib::json &body, fostlib::mime::mime_headers &headers,
-            const fostlib::json &position_js, const fostlib::jcursor &position_jc) const;
+            const fostlib::jcursor &position_jc) const;
 
         /// Prepare a HTML response
         virtual boost::shared_ptr<fostlib::mime> html_response(
             const fostlib::json &options,
             const fostlib::json &body, fostlib::mime::mime_headers &headers,
-            const fostlib::json &position_js, const fostlib::jcursor &position_jc) const;
+            const fostlib::jcursor &position_jc) const;
     };
 
 

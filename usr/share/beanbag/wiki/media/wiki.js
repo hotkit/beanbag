@@ -11,7 +11,7 @@ function WikiController($location, $http) {
     this.loadpage = function() {
         $http.get($location.path()).
             success(function(data, status, headers, config) {
-                self.page = data[""];
+                self.page = data;
                 self.meta.version = headers()["etag"];
             }).
             error(function(data, status, headers, config) {
@@ -20,7 +20,7 @@ function WikiController($location, $http) {
     }
     this.loadpage();
     this.savepage = function() {
-        $http.put($location.path(), {"":this.page},
+        $http.put($location.path(), this.page,
                 {headers:{'If-Match': self.meta.version}}).
             success(function(data, status, headers, config) {
                 self.tab = 'show';

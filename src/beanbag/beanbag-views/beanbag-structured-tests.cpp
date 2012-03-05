@@ -25,7 +25,7 @@ namespace {
 
         const beanbag::structured_view view;
         fostlib::mime::mime_headers headers;
-        fostlib::json database, options;
+        fostlib::json database, options, response_data;
         fostlib::host host;
         int status;
         boost::shared_ptr<fostlib::mime> response;
@@ -46,7 +46,20 @@ namespace {
                 view(options, pathname, req, host);
             response = res.first;
             status = res.second;
+            if ( response->headers()["Content-Type"].value() == "application/json" )
+                response_data = fostlib::json::parse(
+                    fostlib::coerce<fostlib::string>(*response));
         }
     };
+}
+
+
+FSL_TEST_FUNCTION(get_for_empty_key) {
+    setup env;
+    fostlib::insert(env.database, "", "title", "Home page");
+    env.headers.set("Accept", "application/json");
+    env.do_request("GET", "/");
+    FSL_CHECK_EQ(env.status, 200);
+    FSL_CHECK_EQ(env.response_data, env.database[""]);
 }
 
