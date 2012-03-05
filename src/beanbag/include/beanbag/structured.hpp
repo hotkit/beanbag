@@ -18,11 +18,20 @@ namespace beanbag {
 
 
     class structured_view : public raw_view {
+        fostlib::jcursor relocated(
+            fostlib::jsondb::local &db, fostlib::jcursor position) const;
     public:
         structured_view(const fostlib::string &name);
 
-        fostlib::jcursor position(const fostlib::string &pathname,
-            fostlib::jsondb::local &db) const;
+        std::pair<fostlib::json, int> get(
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
+
+        int put(
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
     };
 
 

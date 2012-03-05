@@ -19,13 +19,34 @@ beanbag::structured_view::structured_view(const fostlib::string &name)
 }
 
 
-fostlib::jcursor beanbag::structured_view::position(
-        const fostlib::string &pathname, fostlib::jsondb::local &db) const {
-    fostlib::jcursor location = raw_view::position(pathname, db);
-    if ( db.has_key(location / "") )
-        location /= "";
-    else if ( db.has_key(location/ 0) )
+fostlib::jcursor beanbag::structured_view::relocated(
+        fostlib::jsondb::local &db, fostlib::jcursor location) const {
+    if ( db.has_key(location/ 0) )
         location /= 0;
+    else
+        location /= "";
     return location;
 }
 
+
+std::pair<fostlib::json, int> beanbag::structured_view::get(
+    const fostlib::json &, const fostlib::string &,
+    fostlib::http::server::request &, const fostlib::host &,
+    fostlib::jsondb::local &db, const fostlib::jcursor &position
+) const {
+    fostlib::jcursor location = relocated(db, position);
+
+    if ( db.has_key(location) )
+        return std::make_pair(db[location], 200);
+    else
+        return std::make_pair(fostlib::json(), 404);
+}
+
+int beanbag::structured_view::put(
+    const fostlib::json &options, const fostlib::string &pathname,
+    fostlib::http::server::request &req, const fostlib::host &host,
+    fostlib::jsondb::local &db, const fostlib::jcursor &position
+) const {
+    return raw_view::put(options, pathname, req, host, db,
+        relocated(db, position));
+}
