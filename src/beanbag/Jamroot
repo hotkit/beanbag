@@ -23,6 +23,7 @@ alias fost :
 explicit fost ;
 
 alias beanbag :
+        ../fost-base/Examples/fprettyjson
         ../fost-web/Configuration
         ../fost-web/Cpp/fost-webserver
         beanbag-views
