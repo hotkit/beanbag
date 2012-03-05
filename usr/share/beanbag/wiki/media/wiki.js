@@ -43,7 +43,7 @@ angular.directive('ui:tinymce', function(expression, config) {
     return function(element) {
         element.tinymce({
             // Location of TinyMCE script
-            script_url: 'http://www.tinymce.com/js/tinymce/jscripts/tiny_mce/tiny_mce.js',
+            script_url: '/_/tinymce/jscripts/tiny_mce/tiny_mce.js',
 
             // General options
             theme: "advanced",
