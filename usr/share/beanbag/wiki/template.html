@@ -13,12 +13,12 @@
     </head>
     <body ng:controller="WikiController">
         <p class="crumbs"><a href="/">Home</a></p>
-        <ng:switch on="editors.title">
-            <form class="title" ng:switch-when="true" ng:submit="savepage()">
-                <input type="text" ng:model="page.title"autofocus="autofocus">
+        <ng:switch on="tab">
+            <form class="title" ng:switch-when="edit" ng:submit="savepage()">
+                <input type="text" ng:model="page.title">
                 <button>Save</button>
             </form>
-            <h1 ng:switch-default ng:click="editors.title=true">{{page.title}}</h1>
+            <h1 ng:switch-default><span ng:click="tab='edit'">{{page.title}}</span></h1>
         </ng:switch>
         <hr />
         <ul class="tabs">
@@ -31,7 +31,6 @@
                 <div ng:switch-when="edit">
                     <form ng:submit="savepage()">
                         <textarea ui:tinymce ng:model="page.content"></textarea>
-                        <button>Save</button>
                     </form>
                 </div>
             </ng:switch>

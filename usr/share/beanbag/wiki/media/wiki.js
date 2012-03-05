@@ -6,8 +6,6 @@ function WikiController($location, $http) {
         $location.path("/").replace();
     console.log($location.path());
 
-    this.editors = {
-        "title": false};
     this.meta = {}
     this.page = {}
     this.loadpage = function() {
@@ -25,7 +23,6 @@ function WikiController($location, $http) {
         $http.put($location.path(), {"":this.page},
                 {headers:{'If-Match': self.meta.version}}).
             success(function(data, status, headers, config) {
-                self.editors.title = false;
                 self.tab = 'show';
                 self.meta.version = headers()["etag"];
             }).
