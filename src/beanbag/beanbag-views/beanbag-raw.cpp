@@ -37,26 +37,14 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
         beanbag::database(options["database"]);
     fostlib::jsondb::local db(*db_ptr);
 
-    fostlib::split_type path = fostlib::split(pathname, "/");
-    fostlib::json data_path; fostlib::jcursor position;
-    for ( fostlib::split_type::const_iterator part(path.begin());
-            part != path.end(); ++part ) {
-        try {
-            int index = fostlib::coerce<int>(*part);
-            fostlib::push_back(data_path, index);
-            position /= index;
-        } catch ( fostlib::exceptions::parse_error& ) {
-            fostlib::push_back(data_path, *part);
-            position /= *part;
-        }
-    }
-    fostlib::insert(log, "jcursor", data_path);
+    fostlib::jcursor location = position(pathname, db);
+    fostlib::insert(log, "jcursor", fostlib::coerce<fostlib::json>(location));
 
     std::pair<fostlib::json, int> data;
     if ( req.method() == "GET" )
-        data = get(options, pathname, req, host, db, position);
+        data = get(options, pathname, req, host, db, location);
     else if ( req.method() == "PUT" )
-        data = put(options, pathname, req, host, db, position);
+        data = put(options, pathname, req, host, db, location);
     else {
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
@@ -74,10 +62,10 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
         if ( !req.query_string().isnull()
                 || accept.find("application/json") < accept.find("text/html") )
             return std::make_pair(json_response(options,
-                    data.first, response_headers, data_path, position), data.second);
+                    data.first, response_headers, location), data.second);
         else
             return std::make_pair(html_response(options,
-                    data.first, response_headers, data_path, position), data.second);
+                    data.first, response_headers, location), data.second);
     } else {
         fostlib::string view_name = "fost.response." +
             fostlib::coerce<fostlib::string>(data.second);
@@ -86,6 +74,22 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     }
 }
 
+
+fostlib::jcursor beanbag::raw_view::position(
+        const fostlib::string &pathname, fostlib::jsondb::local &) const {
+    fostlib::split_type path = fostlib::split(pathname, "/");
+    fostlib::jcursor position;
+    for ( fostlib::split_type::const_iterator part(path.begin());
+            part != path.end(); ++part ) {
+        try {
+            int index = fostlib::coerce<int>(*part);
+            position /= index;
+        } catch ( fostlib::exceptions::parse_error& ) {
+            position /= *part;
+        }
+    }
+    return position;
+}
 
 fostlib::string beanbag::raw_view::etag(const fostlib::json &structure) const {
     fostlib::string json_string = fostlib::json::unparse(structure, false);
@@ -140,7 +144,7 @@ std::pair<fostlib::json, int> beanbag::raw_view::put(
 boost::shared_ptr<fostlib::mime> beanbag::raw_view::json_response(
         const fostlib::json &options,
         const fostlib::json &body, fostlib::mime::mime_headers &headers,
-        const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
+        const fostlib::jcursor &position_jc) const {
     headers.set("ETag", etag(body));
     return boost::shared_ptr<fostlib::mime>( new fostlib::text_body(
         fostlib::json::unparse(body, true), headers, L"application/json" ) );
@@ -150,7 +154,7 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::json_response(
 boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
         const fostlib::json &options,
         const fostlib::json &body, fostlib::mime::mime_headers &headers,
-        const fostlib::json &position_js, const fostlib::jcursor &position_jc) const {
+        const fostlib::jcursor &position_jc) const {
     fostlib::string html;
     if ( options["html"].has_key("redirect") ) {
         if ( position_jc == fostlib::jcursor() )
@@ -164,7 +168,7 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
         html = replaceAll(html, "[[data]]",
             fostlib::json::unparse(body, true));
         html = replaceAll(html, "[[path]]",
-            fostlib::json::unparse(position_js, false));
+            fostlib::json::unparse(fostlib::coerce<fostlib::json>(position_jc), false));
         html = replaceAll(html, "[[etag]]", etag(body));
 
         headers.set("ETag", "\"" + fostlib::md5(html) + "\"");
