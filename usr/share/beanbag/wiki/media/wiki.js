@@ -46,7 +46,7 @@ angular.directive('ui:tinymce', function(expression, config) {
             script_url: 'http://resources.holycrap.ws/jscripts/tiny_mce/tiny_mce.js',
 
             // General options
-            theme: "simple",
+            theme: "advanced",
 
             // Update Textarea and Trigger change event
             handle_event_callback: function(e) {
