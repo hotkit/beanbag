@@ -35,7 +35,7 @@ namespace beanbag {
             fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
 
         /// Return the JSON that will form the basis of the PUT response
-        virtual std::pair<fostlib::json, int> put(
+        virtual int put(
             const fostlib::json &options, const fostlib::string &pathname,
             fostlib::http::server::request &req, const fostlib::host &,
             fostlib::jsondb::local &db, const fostlib::jcursor &position) const;

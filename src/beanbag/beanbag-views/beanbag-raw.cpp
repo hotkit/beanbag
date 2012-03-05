@@ -43,9 +43,12 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
     std::pair<fostlib::json, int> data;
     if ( req.method() == "GET" )
         data = get(options, pathname, req, host, db, location);
-    else if ( req.method() == "PUT" )
-        data = put(options, pathname, req, host, db, location);
-    else {
+    else if ( req.method() == "PUT" ) {
+        int status = put(options, pathname, req, host, db, location);
+        data = std::make_pair(
+            get(options, pathname, req, host, db, location).first,
+            status);
+    } else {
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
                     req.method() + " not supported",
@@ -109,7 +112,7 @@ std::pair<fostlib::json, int> beanbag::raw_view::get(
 }
 
 
-std::pair<fostlib::json, int> beanbag::raw_view::put(
+int beanbag::raw_view::put(
     const fostlib::json &options, const fostlib::string &pathname,
     fostlib::http::server::request &req, const fostlib::host &host,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
@@ -135,9 +138,8 @@ std::pair<fostlib::json, int> beanbag::raw_view::put(
             db.insert(position, new_data);
         }
         db.commit();
-        return std::make_pair(db[position], status);
     }
-    return std::make_pair(fostlib::json(), status);
+    return status;
 }
 
 
