@@ -1,10 +1,14 @@
 
+function RouteWatcher($route, $location) {
+    if ( !$location.path() )
+        $location.path("/").replace();
+    $route.otherwise({controller:WikiController, template:'/_/page.html'});
+}
+RouteWatcher.$inject = ['$route', '$location'];
+
 // The wiki AngularJS controller
 function WikiController($location, $http) {
     var self = this;
-    if ( !$location.path() )
-        $location.path("/").replace();
-    console.log($location.path());
 
     this.meta = {}
     this.page = {}
@@ -32,7 +36,6 @@ function WikiController($location, $http) {
     }
     self.tab = 'show';
 }
-
 WikiController.$inject = ['$location', '$http'];
 
 

@@ -1,0 +1,43 @@
+<!doctype xhtml>
+<html xmlns:ng="http://angularjs.org" ng:app>
+    <head>
+        <title>Page content</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+            </script>
+        <script src="/_/tinymce/jscripts/tiny_mce/jquery.tinymce.js">
+            </script>
+        <script src="/_/wiki.js"></script>
+        <link rel="stylesheet" type="text/css" href="/_/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/_/wiki.css" />
+    </head>
+    <body ng:controller="WikiController">
+        <p class="crumbs"><a href="/">Home</a></p>
+        <ng:switch on="tab">
+            <form class="title" ng:switch-when="edit" ng:submit="savepage()">
+                <input type="text" ng:model="page.title">
+                <button>Save</button>
+            </form>
+            <h1 ng:switch-default>{{page.title}}</h1>
+        </ng:switch>
+        <hr />
+        <ul class="tabs">
+            <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
+            <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
+        </ul>
+        <div class="content">
+            <ng:switch on="tab">
+                <div ng:switch-when="show">{{page.content | html:'unsafe'}}</div>
+                <div ng:switch-when="edit">
+                    <form ng:submit="savepage()">
+                        <textarea ui:tinymce ng:model="page.content"></textarea>
+                    </form>
+                </div>
+            </ng:switch>
+        </div>
+        <hr />
+        <dl class="footer">
+            <dt>Version</dt>
+                <dd>{{meta.version}}</dd>
+        </dl>
+    </body>
+</html>
