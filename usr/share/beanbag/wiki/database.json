@@ -5,8 +5,20 @@
     },
     "test" : {
         "" : {
-            "content" : "<p>We now have some test content in here... Will this work as it should?</p>",
+            "content" : "<p>We now have some test content in here... <a href=\"#/test/one\">Will this work as it should?</a></p>\n<p>&nbsp;</p>",
             "title" : "Another page (test)"
+        },
+        "one" : {
+            "" : {
+                "content" : "<p>A sub-page of test created by adding a <a href=\"#/\">link</a> and getting the <a href=\"#/test/two\">edit</a> view.</p>",
+                "title" : "One"
+            }
+        },
+        "two" : {
+            "" : {
+                "content" : "<p>Another page, another test.</p>\n<p>Just checking to see what happens.</p>",
+                "title" : "Two"
+            }
         }
     }
 }
