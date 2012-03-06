@@ -44,6 +44,13 @@ WikiController.$inject = ['$location', '$http'];
 // http://jsfiddle.net/ProLoser/nTzRA/
 angular.directive('ui:tinymce', function(expression, config) {
     return function(element) {
+        var callback = function() {
+            if (this.isDirty()) {
+                this.save();
+                element.trigger('change');
+            }
+            return true;
+        };
         element.tinymce({
             // Location of TinyMCE script
             script_url: '/_/tinymce/jscripts/tiny_mce/tiny_mce.js',
@@ -53,13 +60,8 @@ angular.directive('ui:tinymce', function(expression, config) {
             plugins: "inlinepopups",
 
             // Update Textarea and Trigger change event
-            handle_event_callback: function(e) {
-                if (this.isDirty()) {
-                    this.save();
-                    element.trigger('change');
-                }
-                return true;
-            }
+            onchange_callback: callback,
+            handle_event_callback: callback,
         });
     };
 });
