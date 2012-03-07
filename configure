@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
+cd `dirname $0`
 
-git submodule sync
-git submodule update
+if test -e src/fost-web
+then {
+    git submodule sync
+    git submodule update
+}
+else {
+    git submodule sync
+    git submodule update
+    cd src/fost-web
+    git checkout master
+    git flow init -d
+    cd ../..
+}
+fi
 
 svn co http://svn.felspar.com/external/Boost \
     src/Boost
