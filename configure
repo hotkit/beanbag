@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+git submodule sync
+git submodule update
+
 svn co http://svn.felspar.com/external/Boost \
     src/Boost
 src/Boost/install `lsb_release -cs`
