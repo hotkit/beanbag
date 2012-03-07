@@ -12,6 +12,7 @@
 
 
 #include <beanbag/raw.hpp>
+#include <beanbag/structured.hpp>
 
 
 #endif // BEANBAG_BEANBAG

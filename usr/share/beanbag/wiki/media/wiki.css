@@ -1,0 +1,66 @@
+
+body {
+    margin: 1em;
+    font-family: sans-serif;
+}
+em {
+    font-style: italic;
+}
+strong {
+    font-weight: bold;
+}
+
+.crumbs {
+    font-size: small;
+    margin-bottom: 0.6em;
+}
+
+
+h1 {
+    font-size: 1.5em;
+    padding: 3px 1px;
+}
+.title input {
+    font-size: 1.5em;
+    padding-bottom: 1px;
+    width: 50%;
+}
+
+
+.tabs li {
+    background: #eee;
+    display: inline;
+    margin-right: 1.2em;
+    padding: 0 1em;
+}
+.tabs li.show-show, .tabs li.edit-edit {
+    background: #cee;
+}
+
+
+div.content {
+    padding: 1em 0;
+}
+.content textarea {
+    display: block;
+    width: 100%; height: 300px;
+}
+.content p {
+    padding-bottom: 0.7em;
+}
+.content ul {
+    margin-left: 1em;
+    list-style-position: outside;
+    list-style-type: disc;
+}
+.content li {
+    margin-bottom: 0.7em;
+}
+
+
+.footer {
+    font-size: small;
+}
+.footer dd {
+    margin-left: 1em;
+}
