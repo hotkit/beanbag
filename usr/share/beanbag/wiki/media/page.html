@@ -16,7 +16,7 @@
                 <input type="text" ng:model="page.title">
                 <button>Save</button>
             </form>
-            <h1 ng:switch-default>{{page.title}}</h1>
+            <h1 ng:switch-default ng:cloak>{{page.title}}</h1>
         </ng:switch>
         <hr />
         <ul class="tabs">
@@ -36,7 +36,7 @@
         <hr />
         <dl class="footer">
             <dt>Version</dt>
-                <dd>{{meta.version}}</dd>
+                <dd ng:cloak>{{meta.version}}</dd>
         </dl>
     </body>
 </html>
