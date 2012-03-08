@@ -48,6 +48,9 @@ std::pair<boost::shared_ptr<fostlib::mime>, int> beanbag::raw_view::operator () 
         data = std::make_pair(
             get(options, pathname, req, host, db, location).first,
             status);
+    } else if ( req.method() == "DELETE" ) {
+        int status = del(options, pathname, req, host, db, location);
+        data = std::make_pair(fostlib::json(), status);
     } else {
         boost::shared_ptr<fostlib::mime> response(
                 new fostlib::text_body(
@@ -140,6 +143,15 @@ int beanbag::raw_view::put(
         db.commit();
     }
     return status;
+}
+
+
+int beanbag::raw_view::del(
+    const fostlib::json &options, const fostlib::string &pathname,
+    fostlib::http::server::request &req, const fostlib::host &host,
+    fostlib::jsondb::local &db, const fostlib::jcursor &position
+) const {
+    throw fostlib::exceptions::not_implemented("DELETE");
 }
 
 

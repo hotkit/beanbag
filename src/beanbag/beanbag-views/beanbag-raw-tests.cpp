@@ -162,3 +162,10 @@ FSL_TEST_FUNCTION(conditional_put_does_not_match_wildcard) {
         "text/html");
 }
 
+
+FSL_TEST_FUNCTION(delete_on_empty_database) {
+    setup env;
+    env.do_request("DELETE", "/");
+    FSL_CHECK_EQ(env.status, 410);
+}
+
