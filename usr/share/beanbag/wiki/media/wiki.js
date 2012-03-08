@@ -35,6 +35,18 @@ function WikiController($location, $http) {
             });
     }
     self.tab = 'show';
+    this.deletepage = function() {
+        $http.delete($location.path(),
+                {headers:{'If-Match': self.meta.version}}).
+            success(function(data, status, headers, config) {
+                self.page = {};
+                self.tab = 'show';
+                self.meta.version = null;
+            }).
+            error(function(data, status, headers, config) {
+                console.log("error", data, status, headers, config);
+            });
+    }
 }
 WikiController.$inject = ['$location', '$http'];
 
