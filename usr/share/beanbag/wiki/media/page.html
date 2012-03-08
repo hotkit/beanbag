@@ -21,6 +21,7 @@
         <ul class="tabs">
             <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
             <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
+            <li ng:click="tab='delete'" ng:class="'delete-'+tab">Delete</li>
         </ul>
         <hr />
         <div class="content">
@@ -29,6 +30,12 @@
                 <div ng:switch-when="edit">
                     <form ng:submit="savepage()">
                         <textarea ui:tinymce ng:model="page.content"></textarea>
+                    </form>
+                </div>
+                <div ng:switch-when="delete" ng:cloak>
+                    <p>Are you sure you want to delete this page?</p>
+                    <form ng:submit="deletepage()">
+                        <button class="delete">Yes, I'm sure</button>
                     </form>
                 </div>
             </ng:switch>
