@@ -18,11 +18,11 @@
             </form>
             <h1 ng:switch-default ng:cloak>{{page.title}}</h1>
         </ng:switch>
-        <hr />
         <ul class="tabs">
             <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
             <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
         </ul>
+        <hr />
         <div class="content">
             <ng:switch on="tab">
                 <div ng:switch-when="show">{{page.content | html:'unsafe'}}</div>
