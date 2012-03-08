@@ -15,6 +15,7 @@ function WikiController($location, $http) {
     this.loadpage = function() {
         $http.get($location.path()).
             success(function(data, status, headers, config) {
+                self.tab = 'show';
                 self.page = data;
                 self.meta.version = headers()["etag"];
             }).
@@ -34,7 +35,6 @@ function WikiController($location, $http) {
                 console.log("error", data, status, headers, config);
             });
     }
-    self.tab = 'show';
     this.deletepage = function() {
         $http.delete($location.path(),
                 {headers:{'If-Match': self.meta.version}}).
@@ -47,6 +47,7 @@ function WikiController($location, $http) {
                 console.log("error", data, status, headers, config);
             });
     }
+    self.tab = 'edit';
 }
 WikiController.$inject = ['$location', '$http'];
 
