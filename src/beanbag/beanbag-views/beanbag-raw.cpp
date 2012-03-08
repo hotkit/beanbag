@@ -115,25 +115,34 @@ std::pair<fostlib::json, int> beanbag::raw_view::get(
 }
 
 
+int beanbag::raw_view::do_412_check(int fallback,
+        const fostlib::json &options, const fostlib::string &pathname,
+        fostlib::http::server::request &req, const fostlib::host &host,
+        fostlib::jsondb::local &db, const fostlib::jcursor &position) const {
+    if ( req.data()->headers().exists("If-Match") ) {
+        fostlib::string ifmatch = req.data()->headers()["If-Match"].value();
+        if ( ifmatch  == "*" ) {
+            if ( !db.has_key(position) )
+                return 412;
+        } else if ( ifmatch.find(etag(db[position])) == fostlib::string::npos )
+            return 412;
+    }
+    return fallback;
+}
+
+
 int beanbag::raw_view::put(
     const fostlib::json &options, const fostlib::string &pathname,
     fostlib::http::server::request &req, const fostlib::host &host,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
 ) const {
-    int status = 200;
-    boost::shared_ptr< fostlib::binary_body > data(req.data());
-    fostlib::string json_string = fostlib::coerce<fostlib::string>(
-        data->data());
-    fostlib::json new_data = fostlib::json::parse(json_string);
-    if ( req.data()->headers().exists("If-Match") ) {
-        fostlib::string ifmatch = req.data()->headers()["If-Match"].value();
-        if ( ifmatch  == "*" ) {
-            if ( !db.has_key(position) )
-                status = 412;
-        } else if ( ifmatch.find(etag(db[position])) == fostlib::string::npos )
-            status = 412;
-    }
+    int status = do_412_check(
+        200, options, pathname, req, host, db, position);
     if ( status != 412 ) {
+        boost::shared_ptr< fostlib::binary_body > data(req.data());
+        fostlib::string json_string = fostlib::coerce<fostlib::string>(
+            data->data());
+        fostlib::json new_data = fostlib::json::parse(json_string);
         if ( db.has_key(position) )
             db.update(position, new_data);
         else {
@@ -151,7 +160,13 @@ int beanbag::raw_view::del(
     fostlib::http::server::request &req, const fostlib::host &host,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
 ) const {
-    throw fostlib::exceptions::not_implemented("DELETE");
+    int status = do_412_check(
+        410, options, pathname, req, host, db, position);
+    if ( status != 412 ) {
+        db.remove(position);
+        db.commit();
+    }
+    return status;
 }
 
 

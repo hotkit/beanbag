@@ -64,6 +64,12 @@ namespace beanbag {
             const fostlib::json &options,
             const fostlib::json &body, fostlib::mime::mime_headers &headers,
             const fostlib::jcursor &position_jc) const;
+
+    private:
+        int do_412_check(int fallback,
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
     };
 
 
