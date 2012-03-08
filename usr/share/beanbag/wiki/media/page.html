@@ -21,7 +21,8 @@
         <ul class="tabs">
             <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
             <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
-            <li ng:click="tab='delete'" ng:class="'delete-'+tab">Delete</li>
+            <li ng:click="tab='delete'" ng:class="'delete-'+tab"
+                ng:show='meta.version' ng:cloak>Delete</li>
         </ul>
         <hr />
         <div class="content">
