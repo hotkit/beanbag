@@ -32,6 +32,11 @@ namespace beanbag {
             const fostlib::json &options, const fostlib::string &pathname,
             fostlib::http::server::request &req, const fostlib::host &,
             fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
+
+        int del(
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
     };
 
 
