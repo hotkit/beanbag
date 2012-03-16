@@ -79,7 +79,7 @@ angular.directive('ui:tinymce', function(expression, config) {
 
             // General options
             theme: "advanced",
-            plugins: "inlinepopups",
+            plugins: "inlinepopups,preelementfix",
 
             // Update Textarea and Trigger change event
             onchange_callback: callback,
