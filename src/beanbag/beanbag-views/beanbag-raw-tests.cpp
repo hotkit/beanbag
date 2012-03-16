@@ -84,6 +84,8 @@ FSL_TEST_FUNCTION(get_html_has_etag) {
         env.response->headers()["Content-Type"].value(),
         "text/html");
     FSL_CHECK(env.response->headers().exists("ETag"));
+    FSL_CHECK_EQ(env.response->headers()["ETag"].value()[0], '"');
+    FSL_CHECK_NEQ(env.response->headers()["ETag"].value()[1], '"');
 }
 
 
@@ -160,5 +162,13 @@ FSL_TEST_FUNCTION(conditional_put_does_not_match_wildcard) {
     FSL_CHECK_EQ(
         put.response->headers()["Content-Type"].value(),
         "text/html");
+}
+
+
+FSL_TEST_FUNCTION(delete_on_empty_database) {
+    setup env;
+    fostlib::insert(env.database, "path", fostlib::json());
+    env.do_request("DELETE", "/path/");
+    FSL_CHECK_EQ(env.status, 410);
 }
 

@@ -34,8 +34,14 @@ namespace beanbag {
             fostlib::http::server::request &req, const fostlib::host &,
             fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
 
-        /// Return the JSON that will form the basis of the PUT response
+        /// Return status code for the PUT response. The body will be from the GET handler
         virtual int put(
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
+
+        /// Return the status code for the DELETE response
+        virtual int del(
             const fostlib::json &options, const fostlib::string &pathname,
             fostlib::http::server::request &req, const fostlib::host &,
             fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
@@ -58,6 +64,12 @@ namespace beanbag {
             const fostlib::json &options,
             const fostlib::json &body, fostlib::mime::mime_headers &headers,
             const fostlib::jcursor &position_jc) const;
+
+    private:
+        int do_412_check(int fallback,
+            const fostlib::json &options, const fostlib::string &pathname,
+            fostlib::http::server::request &req, const fostlib::host &,
+            fostlib::jsondb::local &db, const fostlib::jcursor &position) const;
     };
 
 

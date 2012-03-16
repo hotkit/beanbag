@@ -50,3 +50,12 @@ int beanbag::structured_view::put(
     return raw_view::put(options, pathname, req, host, db,
         relocated(db, position));
 }
+
+int beanbag::structured_view::del(
+    const fostlib::json &options, const fostlib::string &pathname,
+    fostlib::http::server::request &req, const fostlib::host &host,
+    fostlib::jsondb::local &db, const fostlib::jcursor &position
+) const {
+    return raw_view::del(options, pathname, req, host, db,
+        relocated(db, position));
+}

@@ -51,7 +51,7 @@ Both `application/json` and `text/html` are supported. To receive an `applicatio
 
 ### Request methods ###
 
-Currently both `GET` and `PUT` are supported. `PUT` is used for both creation of new locations inside the JSON and for updating of current values. Conditional `PUT`s (i.e. use of `If-Modified`) can be used to ensure that data has not already been changed. Clients should use the `ETag` header for this purpose.
+Currently `GET`, `PUT` and `DELETE` are supported. `PUT` is used for both creation of new locations inside the JSON and for updating of current values. Conditional `PUT`s (i.e. use of `If-Modified`) can be used to ensure that data has not already been changed. Clients should use the `ETag` header for this purpose. `DELETE` can also be used conditionally to ensure that recently updated information is not deleted.
 
 
 ## beanbag.structured ##
