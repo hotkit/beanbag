@@ -23,6 +23,9 @@
             <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
             <li ng:click="tab='delete'" ng:class="'delete-'+tab"
                 ng:show='meta.version' ng:cloak>Delete</li>
+            <li ng:click="undelete()" ng:class="'undelete='+tab"
+                ng:show='deleted &amp;&amp; !page.content &amp;&amp; !page.title'
+                ng:cloak>Undo delete</li>
         </ul>
         <hr />
         <div class="content">

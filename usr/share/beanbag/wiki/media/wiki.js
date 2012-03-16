@@ -10,27 +10,27 @@ RouteWatcher.$inject = ['$route', '$location'];
 function WikiController($location, $http) {
     var self = this;
 
-    this.meta = {}
-    this.page = {}
+    this.meta = {};
+    this.page = {};
+    this.deleted = null;
+    this.success = function(data, status, headers, config) {
+        self.tab = 'show';
+        self.deleted = null;
+        self.page = data;
+        self.meta.version = headers()["etag"];
+    }
     this.loadpage = function() {
         $http.get($location.path()).
-            success(function(data, status, headers, config) {
-                self.tab = 'show';
-                self.page = data;
-                self.meta.version = headers()["etag"];
-            }).
+            success(self.success).
             error(function(data, status, headers, config) {
                 console.log("error", data, status, headers, config);
             });
     }
     this.loadpage();
     this.savepage = function() {
-        $http.put($location.path(), this.page,
+        $http.put($location.path(), self.page,
                 {headers:{'If-Match': self.meta.version}}).
-            success(function(data, status, headers, config) {
-                self.tab = 'show';
-                self.meta.version = headers()["etag"];
-            }).
+            success(self.success).
             error(function(data, status, headers, config) {
                 console.log("error", data, status, headers, config);
             });
@@ -40,11 +40,20 @@ function WikiController($location, $http) {
                 {headers:{'If-Match': self.meta.version}}).
             error(function(data, status, headers, config) {
                 if ( status == 410 ) {
+                    self.deleted = self.page;
                     self.page = {};
                     self.tab = 'edit';
                     self.meta.version = null;
                 } else
                     console.log("error", data, status, headers, config);
+            });
+    }
+    this.undelete = function() {
+        $http.put($location.path(), self.deleted,
+                  {headers:{'If-Not-Match': '*'}}).
+            success(self.success).
+            error(function(data, status, headers, config) {
+                console.log("error", data, status, headers, config);
             });
     }
     self.tab = 'edit';
