@@ -56,6 +56,11 @@ int beanbag::structured_view::del(
     fostlib::http::server::request &req, const fostlib::host &host,
     fostlib::jsondb::local &db, const fostlib::jcursor &position
 ) const {
-    return raw_view::del(options, pathname, req, host, db,
-        relocated(db, position));
+    fostlib::jcursor location = relocated(db, position);
+    int status = raw_view::del(options, pathname, req, host, db, location);
+    if ( status == 410 && db[position] == fostlib::json(fostlib::json::object_t()) ) {
+        db.remove(position);
+        db.commit();
+    }
+    return status;
 }
