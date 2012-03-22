@@ -191,14 +191,18 @@ boost::shared_ptr<fostlib::mime> beanbag::raw_view::html_response(
                 fostlib::coerce<boost::filesystem::wpath>(
                     options["html"]["redirect"]["root"]));
     } else {
-        html = fostlib::utf::load_file(
-            fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"]));
+        if ( options["html"].has_key("template") ) {
+            html = fostlib::utf::load_file(
+                fostlib::coerce<boost::filesystem::wpath>(options["html"]["template"]));
 
-        html = replaceAll(html, "[[data]]",
-            fostlib::json::unparse(body, true));
-        html = replaceAll(html, "[[path]]",
-            fostlib::json::unparse(fostlib::coerce<fostlib::json>(position_jc), false));
-        html = replaceAll(html, "[[etag]]", etag(body));
+            html = replaceAll(html, "[[data]]",
+                fostlib::json::unparse(body, true));
+            html = replaceAll(html, "[[path]]",
+                fostlib::json::unparse(fostlib::coerce<fostlib::json>(position_jc), false));
+            html = replaceAll(html, "[[etag]]", etag(body));
+        } else
+            html = fostlib::utf::load_file(
+                fostlib::coerce<boost::filesystem::wpath>(options["html"]["static"]));
 
         headers.set("ETag", "\"" + fostlib::md5(html) + "\"");
     }
