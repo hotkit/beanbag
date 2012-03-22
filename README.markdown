@@ -42,6 +42,14 @@ Would appear as the equivalent JavaScript location:
 
 If you were to do a `PUT` to a location like this then Beanbag will create objects and arrays as required to fulfil the location. If the data already present won't allow for the type of index access your path implies then an error will be returned.
 
+Within the view configuration there needs to be a `html` key which contains either a `template` key or a `static` key. In either case the value is a file location that provides the HTML view. If it is `static` then it is always served as is. If it is `template` then the following substitutions are made:
+
+1. `[[path]]` --- The representation of the file path the server sees as JSON data.
+2. `[[data]]` --- The representation of the JSON data at the location specified by the path.
+3. `[[etag]]` --- The ETag value for the data.
+
+For examples see the raw and GTF demos.
+
 ### Media types ###
 
 Both `application/json` and `text/html` are supported. To receive an `application/json` response then:
