@@ -16,7 +16,7 @@
                         "template": "usr/share/beanbag/gtf/database.json"
                     },
                     "html": {
-                        "template": "usr/share/beanbag/gtf/template.html"
+                        "static": "usr/share/beanbag/gtf/page.html"
                     }
                 }
             }
