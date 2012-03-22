@@ -1,8 +1,62 @@
-<html>
+<doctype html>
+<html ng-app>
   <head>
     <title>GTF</title>
+    <script src="http://docs-next.angularjs.org/angular-1.0.0rc1.min.js"></script>
+    <script>
+        function controller($scope, $http) {
+            $scope.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $scope.letter1 = 'A';
+            $scope.choose1 = function(c) { $scope.letter1 = c; }
+            $scope.letter2 = 'A';
+            $scope.choose2 = function(c) { $scope.letter2 = c; }
+            $scope.letter3 = 'A';
+            $scope.choose3 = function(c) { $scope.letter3 = c; }
+
+            $scope.old_tla = null;
+            $scope.tla = function() {
+                var new_tla = $scope.letter1 + $scope.letter2 + $scope.letter3;
+                if ( new_tla != $scope.old_tla ) {
+                    console.log($scope.old_tla, new_tla);
+                    $http.get('/'+ new_tla).
+                        success(function(data) {
+                            $scope.definitions = data;
+                            $scope.old_tla = new_tla;
+                        }).
+                        error(function(data) {
+                            $scope.definitions = [];
+                            $scope.old_tla = new_tla;
+                        });
+                }
+                return new_tla;
+            }
+
+            $scope.definitions = ["one", "two"];
+        }
+    </script>
+    <style>
+        ul.letter li { display:inline; margin-right: 1em; }
+        li.choice-true { font-weight: bold; color: blue; }
+        p.error { color: red; }
+    </style>
   </head>
-  <body>
-    <h1>GTF</h1>
+  <body ng-controller="controller">
+    <h1>GTF &mdash; <span class="tla">{{ tla() }}</span></h1>
+    <ul class="letter">
+        <li ng-repeat="letter in letters" class="choice-{{$parent.letter1==letters[$index]}}"
+            ng-click="$parent.choose1(letters[$index])">{{letters[$index]}}</li>
+    </ul>
+    <ul class="letter">
+        <li ng-repeat="letter in letters" class="choice-{{$parent.letter2==letters[$index]}}"
+            ng-click="$parent.choose2(letters[$index])">{{letters[$index]}}</li>
+    </ul>
+    <ul class="letter">
+        <li ng-repeat="letter in letters" class="choice-{{$parent.letter3==letters[$index]}}"
+            ng-click="$parent.choose3(letters[$index])">{{letters[$index]}}</li>
+    </ul>
+    <ul ng-show="definitions.length">
+        <li ng-repeat="def in definitions">{{def}}</li>
+    </ul>
+    <p ng-show="!definitions.length" class="error">No acronym found for {{ tla() }}.</p>
   </body>
 </html>
