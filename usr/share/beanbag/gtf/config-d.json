@@ -1,0 +1,25 @@
+{
+    "webserver": {
+        "load": ["libbeanbag-views-d.so"],
+
+        "hosts": {
+            "": "raw"
+        },
+
+        "views": {
+            "raw": {
+                "view": "beanbag.raw",
+                "configuration": {
+                    "database": {
+                        "name": "gtf",
+                        "filepath": "gtf.json",
+                        "template": "usr/share/beanbag/gtf/database.json"
+                    },
+                    "html": {
+                        "template": "usr/share/beanbag/gtf/template.html"
+                    }
+                }
+            }
+        }
+    }
+}
