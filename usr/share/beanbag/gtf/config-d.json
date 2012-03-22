@@ -11,12 +11,12 @@
                 "view": "beanbag.raw",
                 "configuration": {
                     "database": {
-                        "name": "raw",
-                        "filepath": "raw.json",
+                        "name": "gtf",
+                        "filepath": "gtf.json",
                         "template": "usr/share/beanbag/gtf/database.json"
                     },
                     "html": {
-                        "template": "usr/share/beanbag/raw/template.html"
+                        "template": "usr/share/beanbag/gtf/template.html"
                     }
                 }
             }
