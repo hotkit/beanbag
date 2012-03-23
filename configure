@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 cd `dirname $0`
 
-if test -e src/fost-web
+if test -e src/fost-beanbag
 then {
     git submodule sync
     git submodule update
@@ -9,7 +9,10 @@ then {
 else {
     git submodule sync
     git submodule update
-    cd src/fost-web
+    cd src/fost-beanbag
+    git checkout master
+    git flow init -d
+    cd ../fost-web
     git checkout master
     git flow init -d
     cd ../..
