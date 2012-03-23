@@ -16,29 +16,34 @@
             $scope.tla = function() {
                 var new_tla = $scope.letter1 + $scope.letter2 + $scope.letter3;
                 if ( new_tla != $scope.old_tla ) {
-                    console.log($scope.old_tla, new_tla);
+                    $scope.old_tla = new_tla;
                     $http.get('/'+ new_tla).
                         success(function(data) {
                             $scope.definitions = data;
-                            $scope.old_tla = new_tla;
                         }).
-                        error(function(data) {
+                        error(function() {
                             $scope.definitions = [];
-                            $scope.old_tla = new_tla;
+                            $scope.wikipedia = null;
+                            $http.jsonp('http://en.wikipedia.org/w/api.php?' +
+                                    'format=json&action=query&list=search&' +
+                                    'srsearch=' + new_tla + '&callback=JSON_CALLBACK').
+                                success(function(data) {
+                                    $scope.wikipedia = data;
+                                }).
+                                error(function() {
+                                    $scope.wikipedia = {query:{searchinfo:{totalhits:0}}};
+                                });
                         });
                 }
                 return new_tla;
             }
-
-            $scope.definitions = ["one", "two"];
         }
     </script>
     <style>
         ul.letter li { display:inline; margin-right: 1em; }
         li.choice-true { font-weight: bold; color: blue; }
         p.error { color: red; }
-        .tla { color: blue; }
-        .tla-true { color: blue; }
+        .tla, .tla-true, .searchmatch { color: blue; }
     </style>
   </head>
   <body ng-controller="controller">
@@ -58,6 +63,18 @@
     <ul ng-show="definitions.length">
         <li ng-repeat="def in definitions" class="tla-{{def=='GPL\'ed TLA FAQ'}}">{{def}}</li>
     </ul>
-    <p ng-show="!definitions.length" class="error">No acronym found for {{ tla() }}.</p>
+    <div ng-show="!definitions.length">
+        <p class="error">No acronym found for {{ tla() }}.</p>
+        <p ng-show="wikipedia.query.searchinfo.totalhits">
+            Found {{wikipedia.query.searchinfo.totalhits}} matches on Wikipedia.</p>
+        <p ng-show="wikipedia.error" class="error">
+            The Wikipedia search failed &mdash; {{wikipedia.error.info}}</p>
+        <ul ng-show="wikipedia">
+            <li ng-repeat="entry in wikipedia.query.search">
+                <p>{{entry.title}}</p>
+                <p ng-bind-html="entry.snippet"></p>
+            </li>
+        </ul>
+    </div>
   </body>
 </html>
