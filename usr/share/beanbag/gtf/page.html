@@ -31,7 +31,7 @@
                                     $scope.wikipedia = data;
                                 }).
                                 error(function() {
-                                    $scope.wikipedia = {query:{searchinfo:{totalhits:0}}};
+                                    $scope.wikipedia = {error:{info:"Could not contact Wikipedia"}};
                                 });
                         });
                 }
