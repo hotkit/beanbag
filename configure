@@ -23,7 +23,7 @@ svn co http://svn.felspar.com/external/Boost \
     src/Boost
 src/Boost/install `lsb_release -cs`
 cat > src/boost-version.jam << END
-BUILD_DIRECTORY = "../../tmp/oneiric" ;
+BUILD_DIRECTORY = "../../tmp/`lsb_release -cs`" ;
 BOOST_VERSION_MAJOR = "46" ;
 END
 
