@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd `dirname $0`/src/beanbag
+cd `dirname $0`/src/fost-beanbag
 
 export PREFIX=`pwd`/../../
 CPUCOUNT=`grep -c ^processor /proc/cpuinfo`
