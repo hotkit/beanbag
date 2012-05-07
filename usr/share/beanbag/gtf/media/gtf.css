@@ -4,3 +4,7 @@ li.choice-true { font-weight: bold; color: blue; }
 p.error { color: red; }
 .tla, .tla-true, .searchmatch { color: blue; }
 
+#footer {
+    text-align: center;
+    font-size: small;
+}
