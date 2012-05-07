@@ -1,0 +1,27 @@
+<doctype html>
+<html>
+<head>
+    <title>Jasmine Test Runner</title>
+
+    <!-- Jasmine includes -->
+    <link rel="stylesheet" type="text/css" href="jasmine.css">
+    <script type="text/javascript" src="jasmine.js"></script>
+    <script type="text/javascript" src="jasmine-html.js"></script>
+
+    <!-- Source files -->
+    <script type="text/javascript" src="gtf.js"></script>
+
+    <!-- Spec files -->
+    <script type="text/javascript" src="spec/gtf.js"></script>
+
+</head>
+<body>
+    <h1><a href="/">GTF</a></h1>
+
+    <script type="text/javascript">
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        jasmine.getEnv().execute();
+    </script>
+
+</body>
+</html>
