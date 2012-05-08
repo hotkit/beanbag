@@ -24,5 +24,15 @@ describe("GTF", function() {
         $httpBackend.flush();
         expect($scope.definitions).toEqual([true]);
     });
+    it("asks Wikipedia if the TLA is unknown", function() {
+        $httpBackend.when("GET", "/GTF").respond(404, 'Not found');
+        $httpBackend.when("JSONP", /en.wikipedia.org/).respond([true]);
+        expect($scope.tla()).toEqual("GTF");
+        expect($scope.definitions).not.toBeDefined();
+        expect($scope.wikipedia).not.toBeDefined();
+        $httpBackend.flush();
+        expect($scope.definitions).toEqual([]);
+        expect($scope.wikipedia).toEqual([true]);
+    });
 });
 
