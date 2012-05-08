@@ -20,6 +20,7 @@ describe("GTF", function() {
     it("tla returns the right result", function() {
         $httpBackend.when("GET", "/GTF").respond([true]);
         expect($scope.tla()).toEqual("GTF");
+        expect($scope.definitions).not.toBeDefined();
         $httpBackend.flush();
         expect($scope.definitions).toEqual([true]);
     });
