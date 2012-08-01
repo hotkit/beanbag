@@ -3,48 +3,8 @@
   <head>
     <title>GTF</title>
     <script src="http://docs-next.angularjs.org/angular-1.0.0rc1.min.js"></script>
-    <script>
-        function controller($scope, $http) {
-            $scope.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            $scope.letter1 = 'G';
-            $scope.letter2 = 'T';
-            $scope.letter3 = 'F';
-
-            $scope.choose = function(n, c) { $scope['letter' + n] = c; }
-
-            $scope.old_tla = null;
-            $scope.tla = function() {
-                var new_tla = $scope.letter1 + $scope.letter2 + $scope.letter3;
-                if ( new_tla != $scope.old_tla ) {
-                    $scope.old_tla = new_tla;
-                    $http.get('/'+ new_tla).
-                        success(function(data) {
-                            $scope.definitions = data;
-                        }).
-                        error(function() {
-                            $scope.definitions = [];
-                            $scope.wikipedia = null;
-                            $http.jsonp('http://en.wikipedia.org/w/api.php?' +
-                                    'format=json&action=query&list=search&' +
-                                    'srsearch=' + new_tla + '&callback=JSON_CALLBACK').
-                                success(function(data) {
-                                    $scope.wikipedia = data;
-                                }).
-                                error(function() {
-                                    $scope.wikipedia = {error:{info:"Could not contact Wikipedia"}};
-                                });
-                        });
-                }
-                return new_tla;
-            }
-        }
-    </script>
-    <style>
-        ul.letter li { display:inline; margin-right: 1em; }
-        li.choice-true { font-weight: bold; color: blue; }
-        p.error { color: red; }
-        .tla, .tla-true, .searchmatch { color: blue; }
-    </style>
+    <script src="/_/gtf.js"></script>
+    <link rel="stylesheet" type="text/css" href="/_/gtf.css">
   </head>
   <body ng-controller="controller">
     <h1>GTF &mdash; <span class="tla">{{ tla() }}</span></h1>
@@ -75,6 +35,10 @@
                 <p ng-bind-html="entry.snippet"></p>
             </li>
         </ul>
+    </div>
+    <hr>
+    <div id="footer">
+        <a href="/_/jasmine.html">Run tests</a>
     </div>
   </body>
 </html>
