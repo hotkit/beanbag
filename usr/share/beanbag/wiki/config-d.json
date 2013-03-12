@@ -1,0 +1,40 @@
+{
+    "webserver": {
+        "load": ["libbeanbag-views-d.so"],
+
+        "hosts": {
+            "": "wiki"
+        },
+
+        "views": {
+            "wiki": {
+                "view": "fost.view.pathprefix",
+                "configuration": {
+                    "" : "data",
+                    "_/": "static"
+                }
+            },
+            "data": {
+                "view": "beanbag.structured",
+                "configuration": {
+                    "database": {
+                        "name": "wiki",
+                        "filepath": "wiki.json",
+                        "template": "usr/share/beanbag/wiki/database.json"
+                    },
+                    "html": {
+                        "redirect": {
+                            "root": "usr/share/beanbag/wiki/template.html"
+                        }
+                    }
+                }
+            },
+            "static": {
+                "view": "fost.static",
+                "configuration": {
+                    "root": "usr/share/beanbag/wiki/media/"
+                }
+            }
+        }
+    }
+}

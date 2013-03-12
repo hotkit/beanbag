@@ -1,0 +1,44 @@
+<doctype html>
+<html ng-app>
+  <head>
+    <title>GTF</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.2/angular.min.js"></script>
+    <script src="/_/gtf.js"></script>
+    <link rel="stylesheet" type="text/css" href="/_/gtf.css">
+  </head>
+  <body ng-controller="controller">
+    <h1>GTF &mdash; <span class="tla">{{ tla() }}</span></h1>
+    <ul class="letter">
+        <li ng-repeat="letter in letters" class="choice-{{$parent.letter1==letters[$index]}}"
+            ng-click="$parent.choose(1, letters[$index])">{{letters[$index]}}</li>
+    </ul>
+    <ul class="letter">
+        <li ng-repeat="letter in letters" class="choice-{{$parent.letter2==letters[$index]}}"
+            ng-click="$parent.choose(2, letters[$index])">{{letters[$index]}}</li>
+    </ul>
+    <ul class="letter">
+        <li ng-repeat="letter in letters" class="choice-{{$parent.letter3==letters[$index]}}"
+            ng-click="$parent.choose(3, letters[$index])">{{letters[$index]}}</li>
+    </ul>
+    <ul ng-show="definitions.length">
+        <li ng-repeat="def in definitions" class="tla-{{def=='GPL\'ed TLA FAQ'}}">{{def}}</li>
+    </ul>
+    <div ng-show="!definitions.length">
+        <p class="error">No acronym found for {{ tla() }}.</p>
+        <p ng-show="wikipedia.query.searchinfo.totalhits">
+            Found {{wikipedia.query.searchinfo.totalhits}} matches on Wikipedia.</p>
+        <p ng-show="wikipedia.error" class="error">
+            The Wikipedia search failed &mdash; {{wikipedia.error.info}}</p>
+        <ul ng-show="wikipedia">
+            <li ng-repeat="entry in wikipedia.query.search">
+                <p>{{entry.title}}</p>
+                <p ng-bind-html="entry.snippet"></p>
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <div id="footer">
+        <a href="/_/jasmine.html">Run tests</a>
+    </div>
+  </body>
+</html>

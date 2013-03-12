@@ -1,0 +1,38 @@
+{
+    "webserver": {
+        "load": ["libbeanbag-views-d.so"],
+
+        "hosts": {
+            "": "gtf"
+        },
+
+        "views": {
+            "gtf": {
+                "view": "fost.view.pathprefix",
+                "configuration": {
+                    "": "raw",
+                    "_/": "static"
+                }
+            },
+            "raw": {
+                "view": "beanbag.raw",
+                "configuration": {
+                    "database": {
+                        "name": "gtf",
+                        "filepath": "gtf.json",
+                        "template": "usr/share/beanbag/gtf/database.json"
+                    },
+                    "html": {
+                        "static": "usr/share/beanbag/gtf/page.html"
+                    }
+                }
+            },
+            "static": {
+                "view": "fost.static",
+                "configuration": {
+                    "root": "usr/share/beanbag/gtf/media/"
+                }
+            }
+        }
+    }
+}

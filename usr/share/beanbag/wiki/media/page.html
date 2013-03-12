@@ -1,0 +1,53 @@
+<!doctype xhtml>
+<html xmlns:ng="http://angularjs.org" ng:app>
+    <head>
+        <title>Page content</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+            </script>
+        <script src="/_/tinymce/jscripts/tiny_mce/jquery.tinymce.js">
+            </script>
+        <script src="/_/wiki.js"></script>
+        <link rel="stylesheet" type="text/css" href="/_/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/_/wiki.css" />
+    </head>
+    <body ng:controller="WikiController">
+        <ng:switch on="tab">
+            <form class="title" ng:switch-when="edit" ng:submit="savepage()">
+                <input type="text" ng:model="page.title">
+                <button>Save</button>
+            </form>
+            <h1 ng:switch-default ng:cloak>{{page.title}}</h1>
+        </ng:switch>
+        <ul class="tabs">
+            <li ng:click="tab='show'" ng:class="'show-'+tab">Show</li>
+            <li ng:click="tab='edit'" ng:class="'edit-'+tab">Edit</li>
+            <li ng:click="tab='delete'" ng:class="'delete-'+tab"
+                ng:show='meta.version' ng:cloak>Delete</li>
+            <li ng:click="undelete()" ng:class="'undelete='+tab"
+                ng:show='deleted &amp;&amp; !page.content &amp;&amp; !page.title'
+                ng:cloak>Undo delete</li>
+        </ul>
+        <hr />
+        <div class="content">
+            <ng:switch on="tab">
+                <div ng:switch-when="show">{{page.content | html:'unsafe'}}</div>
+                <div ng:switch-when="edit">
+                    <form ng:submit="savepage()">
+                        <textarea ui:tinymce ng:model="page.content"></textarea>
+                    </form>
+                </div>
+                <div ng:switch-when="delete" ng:cloak>
+                    <p>Are you sure you want to delete this page?</p>
+                    <form ng:submit="deletepage()">
+                        <button class="delete">Yes, I'm sure</button>
+                    </form>
+                </div>
+            </ng:switch>
+        </div>
+        <hr />
+        <dl class="footer">
+            <dt>Version</dt>
+                <dd ng:cloak>{{meta.version}}</dd>
+        </dl>
+    </body>
+</html>
