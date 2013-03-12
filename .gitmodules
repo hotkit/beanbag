@@ -3,4 +3,4 @@
 	url = git@github.com:Felspar/fost-web.git
 [submodule "src/fost-beanbag"]
 	path = src/fost-beanbag
-	url = git@github.com:Felspar/fost-beanbag.git
+	url = git@github.com:KayEss/fost-beanbag.git
