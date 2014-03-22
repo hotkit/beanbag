@@ -6,7 +6,6 @@
 /src/bjam
 /src/bjam.run
 /src/boost-version.jam
-/src/fost-base
 /src/fost-internet
 /src/fost-orm
 /src/python.opts.sh
