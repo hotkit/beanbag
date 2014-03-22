@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-cd `dirname $0`/fost-beanbag
-
-CPUCOUNT=`grep -c ^processor /proc/cpuinfo`
-
-../bjam -j$CPUCOUNT $*
