@@ -1,6 +1,6 @@
 [submodule "src/fost-web"]
 	path = src/fost-web
-	url = git@github.com:Felspar/fost-web.git
+	url = git@github.com:KayEss/fost-web.git
 [submodule "src/fost-beanbag"]
 	path = src/fost-beanbag
 	url = git@github.com:KayEss/fost-beanbag.git
