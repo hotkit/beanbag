@@ -1,24 +1,24 @@
-[submodule "src/fost-web"]
-	path = src/fost-web
+[submodule "fost-web"]
+	path = fost-web
 	url = git@github.com:KayEss/fost-web.git
-[submodule "src/fost-beanbag"]
-	path = src/fost-beanbag
+[submodule "fost-beanbag"]
+	path = fost-beanbag
 	url = git@github.com:KayEss/fost-beanbag.git
-[submodule "src/Boost"]
-	path = src/Boost
+[submodule "Boost"]
+	path = Boost
 	url = git@github.com:KayEss/fost-boost.git
-[submodule "src/crypto++"]
-	path = src/crypto++
+[submodule "crypto++"]
+	path = crypto++
 	url = git@github.com:KayEss/fost-crypto.git
-[submodule "src/OpenSSL"]
-	path = src/OpenSSL
+[submodule "OpenSSL"]
+	path = OpenSSL
 	url = git@github.com:KayEss/fost-openssl.git
-[submodule "src/fost-base"]
-	path = src/fost-base
+[submodule "fost-base"]
+	path = fost-base
 	url = git@github.com:KayEss/fost-base.git
-[submodule "src/fost-internet"]
-	path = src/fost-internet
+[submodule "fost-internet"]
+	path = fost-internet
 	url = git@github.com:KayEss/fost-internet.git
-[submodule "src/fost-orm"]
-	path = src/fost-orm
+[submodule "fost-orm"]
+	path = fost-orm
 	url = git@github.com:KayEss/fost-orm.git
