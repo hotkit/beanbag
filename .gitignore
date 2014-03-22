@@ -2,6 +2,7 @@ bjam
 bjam.run
 build.tmp
 boost-version.jam
+boost-build.jam
 dist
 dist-*
 python.opts.sh
