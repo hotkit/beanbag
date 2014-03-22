@@ -7,3 +7,6 @@
 [submodule "src/Boost"]
 	path = src/Boost
 	url = git@github.com:KayEss/fost-boost.git
+[submodule "src/crypto++"]
+	path = src/crypto++
+	url = git@github.com:KayEss/fost-crypto.git
