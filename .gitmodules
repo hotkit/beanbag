@@ -10,3 +10,6 @@
 [submodule "src/crypto++"]
 	path = src/crypto++
 	url = git@github.com:KayEss/fost-crypto.git
+[submodule "src/OpenSSL"]
+	path = src/OpenSSL
+	url = git@github.com:KayEss/fost-openssl.git
