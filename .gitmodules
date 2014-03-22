@@ -19,3 +19,6 @@
 [submodule "src/fost-internet"]
 	path = src/fost-internet
 	url = git@github.com:KayEss/fost-internet.git
+[submodule "src/fost-orm"]
+	path = src/fost-orm
+	url = git@github.com:KayEss/fost-orm.git
