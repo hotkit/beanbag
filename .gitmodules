@@ -4,3 +4,6 @@
 [submodule "src/fost-beanbag"]
 	path = src/fost-beanbag
 	url = git@github.com:KayEss/fost-beanbag.git
+[submodule "src/Boost"]
+	path = src/Boost
+	url = git@github.com:KayEss/fost-boost.git
