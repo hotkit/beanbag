@@ -11,7 +11,5 @@ BUILD_DIRECTORY = "../../tmp/`lsb_release -cs`" ;
 BOOST_VERSION_MAJOR = "46" ;
 END
 
-svn co http://svn.felspar.com/public/fost-internet/stable/fost-internet \
-    src/fost-internet
 svn co http://svn.felspar.com/public/fost-orm/stable/fost-orm \
     src/fost-orm
