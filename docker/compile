@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+cd `dirname $0`
+
+CPUCOUNT=`grep -c ^processor /proc/cpuinfo`
+
+../bjam -j$CPUCOUNT $*

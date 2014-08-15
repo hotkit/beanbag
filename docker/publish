@@ -9,8 +9,8 @@ for IMAGE in runtime builder; do
 done
 
 # Compile the code
-sudo docker run -v $(pwd)/..:/src -it kayess/fost-builder \
-    fost-build fost-beanbag/compile release
+sudo docker run -v $(pwd)/..:/src -u $(id -u):$(id -g) \
+    -it kayess/fost-builder fost-build docker/compile
 
 # Build and push the images
 for BUILD in beanbag; do
