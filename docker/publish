@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+cd $(dirname $0)
+
+set -ex
+
+# Make sure we have the latest source image
+for IMAGE in runtime builder; do
+    sudo docker pull kayess/fost-$IMAGE
+done
+
+# Compile the code
+sudo docker run -v $(pwd)/..:/src -it kayess/fost-builder \
+    fost-build fost-beanbag/compile release
+
+# Build and push the images
+for BUILD in beanbag; do
+    sudo docker build -t kayess/$BUILD $BUILD
+    #sudo docker push kayess/$BUILD
+done
