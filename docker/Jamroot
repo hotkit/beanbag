@@ -20,4 +20,5 @@ fost-project beanbag-docker
 alias beanbag :
         ../fost-web/Cpp/fost-webserver
         ../fost-beanbag/beanbag-views
+        ../docker/beanbag
     ;

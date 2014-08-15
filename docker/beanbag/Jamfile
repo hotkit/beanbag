@@ -1,0 +1,6 @@
+
+install docker-beanbag :
+        Dockerfile
+    :
+        <location>$(PREFIX)/
+    ;
