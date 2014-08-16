@@ -16,7 +16,8 @@
             "server": {
                 "view": "fost.view.pathprefix",
                 "configuration": {
-                    "": "static"
+                    "": "static",
+                    "db/": "beanbags"
                 }
             },
             "static": {
@@ -24,9 +25,19 @@
                 "configuration": {
                     "root": "/srv/www/"
                 }
+            },
+            "beanbags": {
+                "view": "beanbag.raw",
+                "configuration": {
+                    "database": {
+                        "name": "root",
+                        "filepath": "database.json"
+                    },
+                    "html": {}
+                }
             }
         }
-    }
 
+    }
 }
 

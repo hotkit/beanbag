@@ -12,7 +12,7 @@ function controller($scope, $http) {
         var new_tla = $scope.letter1 + $scope.letter2 + $scope.letter3;
         if ( new_tla != $scope.old_tla ) {
             $scope.old_tla = new_tla;
-            $http.get('/'+ new_tla).
+            $http.get('/db/'+ new_tla).
                 success(function(data) {
                     $scope.definitions = data;
                 }).
