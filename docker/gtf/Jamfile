@@ -5,8 +5,9 @@ install docker-beanbag-gtf :
         <location>$(PREFIX)/docker/gtf
     ;
 
-install docker-beanbag-media :
+install docker-beanbag-srv :
         [ glob-tree *.* : Dockerfile ]
     :
-        <location>$(PREFIX)/docker/gtf/www
+        <location>$(PREFIX)/docker/gtf
+        <install-source-root>$(TOP)/gtf
     ;
