@@ -21,7 +21,7 @@
             "static": {
                 "view": "fost.static",
                 "configuration": {
-                    "root": "/srv/"
+                    "root": "/srv/www/"
                 }
             }
         }
