@@ -1,0 +1,12 @@
+
+install docker-beanbag-gtf :
+        Dockerfile
+    :
+        <location>$(PREFIX)/docker/gtf
+    ;
+
+install docker-beanbag-media :
+        [ glob-tree *.* : Dockerfile ]
+    :
+        <location>$(PREFIX)/docker/gtf/www
+    ;

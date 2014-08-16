@@ -1,0 +1,34 @@
+<doctype html>
+<html>
+<head>
+    <title>Jasmine Test Runner</title>
+
+    <!-- Jasmine includes -->
+    <link rel="stylesheet" type="text/css" href="jasmine.css">
+    <script type="text/javascript" src="jasmine.js"></script>
+    <script type="text/javascript" src="jasmine-html.js"></script>
+
+    <!-- AngularJS -->
+    <script src="//code.angularjs.org/angular-1.0.0rc8.min.js"></script>
+    <script src="//code.angularjs.org/1.0.0rc8/angular-mocks-1.0.0rc8.js"></script>
+
+    <!-- Source files -->
+    <script type="text/javascript" src="gtf.js"></script>
+
+    <!-- Spec files -->
+    <script type="text/javascript" src="gtf-spec.js"></script>
+
+    <!-- Site files -->
+    <link rel="stylesheet" type="text/css" href="gtf.css">
+
+</head>
+<body>
+    <h1><a href="/">GTF</a></h1>
+
+    <script type="text/javascript">
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        jasmine.getEnv().execute();
+    </script>
+
+</body>
+</html>

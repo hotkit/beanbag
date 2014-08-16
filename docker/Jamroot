@@ -21,4 +21,5 @@ alias beanbag :
         ../fost-web/Cpp/fost-webserver
         ../fost-beanbag/beanbag-views
         ../docker/beanbag
+        ../docker/gtf
     ;

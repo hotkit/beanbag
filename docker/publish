@@ -19,7 +19,7 @@ sudo docker build -t kayess/beanbag ../dist-docker
 #sudo docker push kayess/beanbag
 
 # Build and push the images
-# for BUILD in gtf raw wiki; do
-#     sudo docker build -t kayess/beanbag-$BUILD ../dist-docker
-#     sudo docker push kayess/beanbag-$BUILD
-# done
+for BUILD in gtf; do
+    sudo docker build -t kayess/beanbag-$BUILD ../dist-docker/docker/$BUILD
+    # sudo docker push kayess/beanbag-$BUILD
+done
