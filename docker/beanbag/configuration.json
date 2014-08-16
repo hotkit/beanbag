@@ -1,0 +1,31 @@
+{
+    "Server": {
+        "load": [],
+        "port": 80,
+        "host": 0
+    },
+
+    "webserver": {
+
+        "hosts": {
+            "": "server"
+        },
+
+        "views": {
+            "server": {
+                "view": "fost.view.pathprefix",
+                "configuration": {
+                    "": "static"
+                }
+            },
+            "static": {
+                "view": "fost.static",
+                "configuration": {
+                    "root": "/srv/"
+                }
+            }
+        }
+    }
+
+}
+

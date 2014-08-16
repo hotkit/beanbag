@@ -4,3 +4,16 @@ install docker-beanbag :
     :
         <location>$(PREFIX)/
     ;
+
+install docker-beanbag-etc :
+        ../../fost-web/Configuration/mime-types.json
+        configuration.json
+    :
+        <location>$(PREFIX)/etc/
+    ;
+
+install docker-beanbag-srv :
+        index.html
+    :
+        <location>$(PREFIX)/srv/
+    ;
