@@ -12,6 +12,5 @@ ADD srv /srv/
 RUN \
     ldconfig
 
-CMD fost-webserver -p 80 -h 0 \
-    -m /etc/beanbag/mime-types.json \
+CMD fost-webserver \
     -j /etc/beanbag/configuration.json
