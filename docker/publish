@@ -4,9 +4,9 @@ cd $(dirname $0)
 set -ex
 
 # Make sure we have the latest source image
-# for IMAGE in runtime builder; do
-#     sudo docker pull kayess/fost-$IMAGE
-# done
+for IMAGE in runtime builder; do
+    sudo docker pull kayess/fost-$IMAGE
+done
 
 # Compile the code
 rm -rf ../dist-docker
@@ -16,10 +16,10 @@ strip ../dist-docker/bin/* ../dist-docker/lib/*
 
 # Build base beanbag runtime
 sudo docker build -t kayess/beanbag ../dist-docker
-#sudo docker push kayess/beanbag
+sudo docker push kayess/beanbag
 
-# Build and push the images
+# Build and push the example images
 for BUILD in gtf; do
     sudo docker build -t kayess/beanbag-$BUILD ../dist-docker/docker/$BUILD
-    # sudo docker push kayess/beanbag-$BUILD
+    sudo docker push kayess/beanbag-$BUILD
 done
