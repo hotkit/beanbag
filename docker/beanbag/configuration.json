@@ -1,12 +1,9 @@
 {
-    "Server": {
-        "Load": ["beanbag-views"],
-        "Port": 80,
-        "Bind to": 0,
-        "MIME types": "/etc/beanbag/mime-types.json"
-    },
-
     "webserver": {
+        "Load": ["beanbag-views"],
+        "Port": 2222,
+        "Bind to": 0,
+        "MIME types": "/etc/beanbag/mime-types.json",
 
         "hosts": {
             "": "server"

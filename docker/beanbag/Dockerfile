@@ -2,7 +2,7 @@ FROM kayess/fost-runtime
 MAINTAINER Kirit Saelensminde
 
 WORKDIR /srv
-EXPOSE 80
+EXPOSE 2222
 
 ADD etc /etc/beanbag
 ADD bin /usr/local/bin
