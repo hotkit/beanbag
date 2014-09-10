@@ -1,4 +1,4 @@
-# Beanbag — A lightweight JSON database — 0.0 #
+# Beanbag — A lightweight JSON database #
 
 Beanbag is a very lightweight ACID compliant transactional JSON database. The database itself is one or more JSON files and you interact with it through RESTful calls.
 
@@ -22,6 +22,21 @@ Or (for the raw JSON editor):
     bin/fost-webserver-d -p 8080 usr/share/beanbag/raw/config-d.json
 
 The `-p` parameter controls the port the server will appear on.
+
+## Using docker to run a Beanbag server ##
+
+There are a few docker containers for Beanbag. The simplest is to run one of the examples, for example GTF.
+
+    sudo docker run -p 9000:2222 -it kayess/beanbag-gtf
+
+To develop on the container you should set up a `www` directory for static files, and a `database.json` file containing the database that will appear at `/db/`. You then run the docker container using something like this:
+
+    sudo docker run -p 9090:2222 -u $(id -u):$(id -g) -v $(pwd):/srv -dt kayess/beanbag
+
+* The -u option makes sure that changes to the database file are left with the correct ownership.
+* The -v option places the current folder into the web server folder.
+
+The web server will use `./database.json` as the database file and serve files from the `./www` folder.
 
 
 # Server views #

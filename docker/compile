@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-cd `dirname $0`/src/fost-beanbag
+cd `dirname $0`
 
-export PREFIX=`pwd`/../../
 CPUCOUNT=`grep -c ^processor /proc/cpuinfo`
 
 ../bjam -j$CPUCOUNT $*

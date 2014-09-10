@@ -1,0 +1,40 @@
+{
+    "webserver": {
+        "Load": ["beanbag-views"],
+        "Port": 2222,
+        "Bind to": 0,
+        "MIME types": "/etc/beanbag/mime-types.json",
+
+        "hosts": {
+            "": "server"
+        },
+
+        "views": {
+            "server": {
+                "view": "fost.view.pathprefix",
+                "configuration": {
+                    "": "static",
+                    "db/": "beanbags"
+                }
+            },
+            "static": {
+                "view": "fost.static",
+                "configuration": {
+                    "root": "/srv/www/"
+                }
+            },
+            "beanbags": {
+                "view": "beanbag.raw",
+                "configuration": {
+                    "database": {
+                        "name": "root",
+                        "filepath": "database.json"
+                    },
+                    "html": {}
+                }
+            }
+        }
+
+    }
+}
+
