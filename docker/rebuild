@@ -11,14 +11,15 @@ function dockerize {
 
 for RELEASE in precise trusty; do
     # Make sure we have the latest source image
-    for IMAGE in runtime builder; do
-        sudo docker pull kayess/fost-$IMAGE:$RELEASE
+    for IMAGE in fost-runtime fost-builder; do
+        sudo docker pull kayess/$IMAGE:$RELEASE
     done
 
     # Compile the code
     rm -rf ../dist-docker
     sudo docker run -v $(pwd)/..:/src -u $(id -u):$(id -g) \
-        -it kayess/fost-builder:$RELEASE fost-build docker/compile toolset=gcc release
+        -it kayess/fost-builder:$RELEASE \
+            fost-build docker/compile toolset=gcc release
     strip ../dist-docker/bin/* ../dist-docker/lib/*
 
     # Build base beanbag runtime
@@ -26,7 +27,7 @@ for RELEASE in precise trusty; do
 
     # Build and push the example images
     for BUILD in gtf; do
-        dockerize $BUILD $RELEASE docker/$BUILD/
+        dockerize beanbag-$BUILD $RELEASE docker/$BUILD/
         sudo docker push kayess/beanbag-$BUILD:$RELEASE
     done
 done
