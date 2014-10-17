@@ -28,10 +28,10 @@ for RELEASE in precise trusty; do
     # Build and push the example images
     for BUILD in gtf; do
         dockerize beanbag-$BUILD $RELEASE docker/$BUILD/
-        sudo docker push kayess/beanbag-$BUILD:$RELEASE
     done
 done
 
 for IMAGE in beanbag beanbag-gtf; do
     sudo docker tag kayess/$IMAGE:$RELEASE kayess/$IMAGE:latest
+    sudo docker push kayess/beanbag-$BUILD:$RELEASE
 done
