@@ -33,5 +33,5 @@ done
 
 for IMAGE in beanbag beanbag-gtf; do
     sudo docker tag kayess/$IMAGE:$RELEASE kayess/$IMAGE:latest
-    sudo docker push kayess/beanbag-$BUILD:$RELEASE
+    sudo docker push kayess/$IMAGE:latest
 done
