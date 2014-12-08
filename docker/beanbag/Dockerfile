@@ -12,5 +12,4 @@ ADD srv /srv/
 RUN \
     ldconfig
 
-CMD fost-webserver \
-    -j /etc/beanbag/configuration.json
+CMD ["fost-webserver", "-j", "/etc/beanbag/configuration.json"]
