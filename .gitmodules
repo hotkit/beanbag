@@ -22,3 +22,6 @@
 [submodule "fost-orm"]
 	path = fost-orm
 	url = git@github.com:KayEss/fost-orm.git
+[submodule "threading"]
+	path = threading
+	url = git@github.com:KayEss/f5-threading.git
