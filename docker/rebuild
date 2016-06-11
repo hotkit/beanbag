@@ -15,15 +15,32 @@ for RELEASE in precise trusty vivid; do
         sudo docker pull kayess/$IMAGE:$RELEASE
     done
 
+    # Get our Boost stuff in line
+    rm -rf ../dist-docker
+    mkdir -p ../tmp/$RELEASE
+    if test -e ../tmp/$RELEASE/Boost
+    then {
+        pushd ../tmp/$RELEASE/Boost
+        git pull origin master
+    } else {
+        git clone git@github.com:KayEss/fost-boost.git ../tmp/$RELEASE/Boost
+        pushd ../tmp/$RELEASE/Boost
+        ln ../../../../Boost/1_59_0.tar.bz2
+        tar xf 1_59_0.tar.bz2
+        mv boost_1_59_0 1_59_0
+    }
+    fi
+    git submodule init
+    git submodule sync --recursive
+    git submodule update --init --recursive
+    popd
+
     # Compile the code
-    rm -rf ../dist-docker Boost/bjam Boost/1_59_0/bjam
-    mkdir -p ../tmp/$RELEASE/bin.v2 ../tmp/$RELEASE/boost
     sudo docker run -u $(id -u):$(id -g)  -v $(pwd)/..:/src \
-        -v $(pwd)../tmp/$RELEASE/bin.v2:/src/Boost/1_59_0/bin.v2 \
-        -v $(pwd)../tmp/$RELEASE/boost:/src/Boost/boost \
-        -it kayess/fost-builder:$RELEASE \
-            Boost/build 59 0 && Boost/install 59 0 && \
-                fost-build docker/compile toolset=gcc release
+        -v $(pwd)/../tmp/$RELEASE/Boost:/src/Boost/ \
+        -it --rm=true kayess/fost-builder:$RELEASE \
+            bash -c -- "Boost/build 59 0 && Boost/install 59 0 && \
+                PREFIX=/src/dist-docker docker/compile toolset=gcc release"
     strip ../dist-docker/bin/* ../dist-docker/lib/*
 
     # Build base beanbag runtime
