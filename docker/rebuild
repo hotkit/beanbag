@@ -9,7 +9,7 @@ function dockerize {
     sudo docker push kayess/$1:$2
 }
 
-for RELEASE in precise trusty vivid; do
+for RELEASE in precise trusty vivid wily xenial; do
     # Make sure we have the latest source image
     for IMAGE in fost-runtime fost-builder; do
         sudo docker pull kayess/$IMAGE:$RELEASE
