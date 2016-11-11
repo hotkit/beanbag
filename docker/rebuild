@@ -53,6 +53,6 @@ for RELEASE in precise trusty wily xenial; do
 done
 
 for IMAGE in beanbag beanbag-gtf; do
-    sudo docker tag -f kayess/$IMAGE:$RELEASE kayess/$IMAGE:latest
+    sudo docker tag kayess/$IMAGE:$RELEASE kayess/$IMAGE:latest
     sudo docker push kayess/$IMAGE:latest
 done
