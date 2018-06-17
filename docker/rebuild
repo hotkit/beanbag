@@ -17,7 +17,7 @@ for RELEASE in xenial artful bionic; do
 
     # Get our Boost stuff in line
     rm -rf ../dist-docker
-    mkdir -p ../tmp/$RELEASE
+    mkdir -p ../tmp/$RELEASE/build.tmp
     if test -e ../tmp/$RELEASE/Boost
     then {
         pushd ../tmp/$RELEASE/Boost
@@ -36,8 +36,10 @@ for RELEASE in xenial artful bionic; do
     popd
 
     # Compile the code
-    sudo docker run -u $(id -u):$(id -g)  -v $(pwd)/..:/src \
+    sudo docker run -u $(id -u):$(id -g) \
+        -v $(pwd)/..:/src \
         -v $(pwd)/../tmp/$RELEASE/Boost:/src/Boost/ \
+        -v $(pwd)/../tmp/$RELEASE/build.tmp:/src/build.tmp \
         -it --rm=true kayess/fost-builder:$RELEASE \
             bash -c -- "Boost/build 62 0 && Boost/install 62 0 && \
                 PREFIX=/src/dist-docker docker/compile toolset=gcc release"
